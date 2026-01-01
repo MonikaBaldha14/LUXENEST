@@ -1,0 +1,259 @@
+{% style %}
+.section-{{ section.id }}-padding {
+  padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+  padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  background-color: {{ section.settings.color_scheme }};
+}
+@media (max-width: 767px) {
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+  }
+}
+
+.slick-next:before, .slick-prev:before {
+  display: none;
+}
+.slick-prev, .slick-next {
+  position: absolute;
+  top: 50%;
+  z-index: 2;
+  width: 25px !important;
+  height: 25px !important;
+  background-color: #f1f4f3 !important;
+  transform: translateY(-50%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+.slick-prev { left: 10px !important; }
+.slick-next { right: 10px !important; }
+
+.custom-arrow.slick-arrow svg {
+  width: 25px;
+  height: 25px;
+}
+.collection-dropdown {
+  padding: 10px 15px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+  margin-bottom: 0;
+  width: 100%;
+}
+.dropdown-section {
+  display: flex;
+  gap: 15px;
+  align-items: stretch;
+}
+.selector_section {
+  width: 20%;
+  padding: 10px;
+}
+.collection-content {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+}
+.collection-slider {
+  display: flex !important;
+  align-items: stretch;
+  position: relative;
+  overflow: visible;
+}
+.collection-item {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  text-align: center;
+  position: relative;
+  padding: 0 15px;
+}
+.collection-item a {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.collection-item img {
+  border-radius: 8px;
+  max-width: 90px;
+  height: 90px;
+  object-fit: cover;
+  margin: 0 auto;
+}
+.collection-item:after {
+  content: "";
+  width: 1px;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: #c0c0c0;
+}
+.collection-item:last-child:after {
+  display: none;
+}
+.collection-slider .collection-item {
+  width: 14.29%;
+}
+.dropdown_main_title {
+  margin-bottom: 10px;
+}
+.dropdown_main_title h2 {
+  font-size: 20px;
+}
+@media(max-width: 680px){
+  .dropdown-section { display: block; }
+  .selector_section { width: 100%; }
+}
+@media(max-width: 480px){
+  .collection-item:after { display: none; }
+}
+{% endstyle %}
+
+<div class="main_drop_swicher color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding">
+  <section class="main-content">
+    <div class="dropdown-section">
+      {% if section.settings.main_title != blank %}
+        <div class="selector_section" style="background-color: {{ section.settings.bg_color }}; color: {{ section.settings.txt_color }}">
+        <div class="dropdown_main_title">
+          <h2>{{ section.settings.main_title }}</h2>
+        </div>
+        <select class="collection-dropdown" id="collectionDropdown">
+          {% for block in section.blocks %}
+            <option value="{{ block.id }}">{{ block.settings.label }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      {% endif %}
+
+      {% assign first_block_id = section.blocks.first.id %}
+
+      {% for block in section.blocks %}
+        {% assign collection_count = 0 %}
+        {% if block.type == 'collection_group' %}
+          {% for i in (1..15) %}
+            {% assign key = 'collection_' | append: i %}
+            {% if block.settings[key] != blank %}
+              {% assign collection_count = collection_count | plus: 1 %}
+            {% endif %}
+          {% endfor %}
+        {% elsif block.type == 'product_group' %}
+          {% for i in (1..15) %}
+            {% assign key = 'product_' | append: i %}
+            {% if block.settings[key] != blank %}
+              {% assign collection_count = collection_count | plus: 1 %}
+            {% endif %}
+          {% endfor %}
+        {% endif %}
+
+        <div class="collection-content" data-id="{{ block.id }}" style="{% if block.id == first_block_id %}display:block;{% else %}display:none;{% endif %}">
+          {% case block.type %}
+            {% when 'collection_group' %}
+              <div class="collection-slider {% if collection_count > 7 %}collection_slick_slider{% endif %}">
+                {% for i in (1..15) %}
+                  {% assign key = 'collection_' | append: i %}
+                  {% assign handle = block.settings[key] %}
+                  {% if handle != blank %}
+                    {% assign collection = collections[handle] %}
+                    {% if collection %}
+                      <div class="collection-item">
+                        <a href="{{ collection.url }}">
+                          {% if collection.image %}
+                            <img src="{{ collection.image | img_url: 'medium' }}" alt="{{ collection.title }}">
+                          {% endif %}
+                          <p>{{ collection.title }}</p>
+                        </a>
+                      </div>
+                    {% endif %}
+                  {% endif %}
+                {% endfor %}
+              </div>
+            {% when 'product_group' %}
+              <div class="collection-slider {% if collection_count > 7 %}collection_slick_slider{% endif %}">
+                {% for i in (1..15) %}
+                  {% assign key = 'product_' | append: i %}
+                  {% assign product_handle = block.settings[key] %}
+                  {% if product_handle != blank %}
+                    {% assign product = all_products[product_handle] %}
+                    {% if product %}
+                      <div class="collection-item">
+                        <a href="{{ product.url }}">
+                          {% if product.featured_image %}
+                            <img src="{{ product.featured_image | img_url: 'medium' }}" alt="{{ product.title }}">
+                          {% endif %}
+                          <p>{{ product.title }}</p>
+                        </a>
+                      </div>
+                    {% endif %}
+                  {% endif %}
+                {% endfor %}
+              </div>
+          {% endcase %}
+        </div>
+      {% endfor %}
+    </div>
+  </section>
+</div>
+
+<script>
+  function equalizeCollectionItemHeights(slider) {
+    const items = slider.querySelectorAll('.collection-item');
+    let maxHeight = 0;
+    items.forEach(item => item.style.height = 'auto');
+    items.forEach(item => {
+      if (item.offsetHeight > maxHeight) maxHeight = item.offsetHeight;
+    });
+    items.forEach(item => item.style.height = maxHeight + 'px');
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    const dropdown = document.getElementById('collectionDropdown');
+    const allContent = document.querySelectorAll('.collection-content');
+
+    function showSelectedCollection(id) {
+      allContent.forEach(el => {
+        el.style.display = el.dataset.id === id ? 'block' : 'none';
+      });
+
+      setTimeout(() => {
+        const slider = document.querySelector(`.collection-content[data-id="${id}"] .collection_slick_slider`);
+        if (slider && !$(slider).hasClass('slick-initialized')) {
+          $(slider).on('setPosition', function () {
+            equalizeCollectionItemHeights(slider);
+          });
+
+          $(slider).slick({
+            slidesToShow: 7,
+            slidesToScroll: 1,
+            arrows: true,
+            dots: false,
+            infinite: false,
+            prevArrow: '<button type="button" class="slick-prev custom-arrow"><svg width="25px" height="25px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M14 7L9 12L14 17" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg></button>',
+            nextArrow: '<button type="button" class="slick-next custom-arrow"><svg width="25px" height="25px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M10 7L15 12L10 17" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg></button>',
+            responsive: [
+              { breakpoint: 1024, settings: { slidesToShow: 5 }},
+              { breakpoint: 768, settings: { slidesToShow: 3 }},
+              { breakpoint: 480, settings: { slidesToShow: 2 }}
+            ]
+          });
+        } else {
+          equalizeCollectionItemHeights(slider);
+        }
+      }, 100);
+    }
+
+    dropdown.addEventListener('change', function () {
+      showSelectedCollection(this.value);
+    });
+
+    showSelectedCollection(dropdown.value);
+
+    window.addEventListener('resize', function () {
+      const activeSlider = document.querySelector('.collection-content[style*="display: block"] .collection-slider');
+      if (activeSlider) equalizeCollectionItemHeights(activeSlider);
+    });
+  });
+</script>
