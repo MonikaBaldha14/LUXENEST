@@ -1,0 +1,48 @@
+{% for block in section.blocks %}
+  {% if block.settings.footer-link != blank %}
+    <div class="footer-blocks footer-links-main flex_width">
+      <div class="footer-links-inner-main">
+        <ul class="footer-links">
+          {% for link in block.settings.footer-link.links %}
+            <li class="footer-main-links">
+              <a class="mynav-footer-item-list" href="{{ link.url }}">{{ link.title }}</a>
+              <i class="down-arrow fa fa-angle-down" aria-hidden="true"></i>
+
+              {% if link.links != blank %}
+                <ul class="mynav-footer-child-list-toggle">
+                  {% for childlink in link.links %}
+                    <li class="child-footer-menu-toggle">
+                      <a class="child-footer-list-item-toggle" href="{{ childlink.url }}">{{ childlink.title }}</a>
+                    </li>
+                  {% endfor %}
+                </ul>
+              {% endif %}
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  {% endif %}
+{% endfor %}
+
+{% schema %}
+  {
+    "name": "Quick Links",
+    "settings": [],
+    "blocks": [
+      {
+        "type": "footer",
+        "name": "Footer Link",
+        "limit": 5,
+        "settings": [
+          {
+            "type": "link_list",
+            "id": "footer-link",
+            "label": "Footer Menu",
+            "default": "footer"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

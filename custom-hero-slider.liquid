@@ -1,0 +1,183 @@
+{%  style  %} 
+.main_hero_slider {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media (max-width: 767px) {
+    .main_hero_slider {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+
+  .hero_main_flex_section.flex_inner-{{ section.id }} {
+    display: flex;
+    width: 100%;
+    justify-content: start;
+    align-items: stretch;
+    text-align: start;
+    {% if section.settings.text_position == 'left' %}
+    flex-direction: row;
+    {% endif %}
+    {% if section.settings.text_position == 'right' %}
+    flex-direction: row-reverse;
+    {% endif %}
+}
+@media (max-width: 991px) {
+    .hero_main_flex_section.flex_inner-{{ section.id }} {
+        flex-direction: column-reverse;
+    }
+}
+  
+{% endstyle %}
+
+<div class="main_hero_slider color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding" id="hero_slider">
+    <div class="hero_main_flex_section flex_inner-{{ section.id }}">
+        <div class="hero_main_content_block">
+            {% for block in section.blocks %}
+            <div class="hero_inner_item" style="background-color: {{ block.settings.bg_color }};">
+                <div class="hero_text_block">
+                    <div class="main_content">
+                        <div class="hero_slide_up_head">
+                            <h1>{{ block.settings.slide_up_item }}</h1>
+                        </div>
+                        <div class="hero_slide_content">
+                            <p>{{ block.settings.slide_content }}</p>
+                        </div>
+                        {% if block.settings.link != blank %}
+                        <div class="hero_slide_btn">
+                            <a class="custom_btn" href="{{ block.settings.link }}">{{ block.settings.btn }}</a>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="hero_main_image_block">
+            {% for block in section.blocks %}
+            <div class="hero_img_block">
+                {% if block.settings.img == blank %}
+                <svg class="placeholder-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 525.5 525.5">
+                    <path
+                        d="M324.5 212.7H203c-1.6 0-2.8 1.3-2.8 2.8V308c0 1.6 1.3 2.8 2.8 2.8h121.6c1.6 0 2.8-1.3 2.8-2.8v-92.5c0-1.6-1.3-2.8-2.9-2.8zm1.1 95.3c0 .6-.5 1.1-1.1 1.1H203c-.6 0-1.1-.5-1.1-1.1v-92.5c0-.6.5-1.1 1.1-1.1h121.6c.6 0 1.1.5 1.1 1.1V308z">
+                    </path>
+                    <path
+                        d="M210.4 299.5H240v.1s.1 0 .2-.1h75.2v-76.2h-105v76.2zm1.8-7.2l20-20c1.6-1.6 3.8-2.5 6.1-2.5s4.5.9 6.1 2.5l1.5 1.5 16.8 16.8c-12.9 3.3-20.7 6.3-22.8 7.2h-27.7v-5.5zm101.5-10.1c-20.1 1.7-36.7 4.8-49.1 7.9l-16.9-16.9 26.3-26.3c1.6-1.6 3.8-2.5 6.1-2.5s4.5.9 6.1 2.5l27.5 27.5v7.8zm-68.9 15.5c9.7-3.5 33.9-10.9 68.9-13.8v13.8h-68.9zm68.9-72.7v46.8l-26.2-26.2c-1.9-1.9-4.5-3-7.3-3s-5.4 1.1-7.3 3l-26.3 26.3-.9-.9c-1.9-1.9-4.5-3-7.3-3s-5.4 1.1-7.3 3l-18.8 18.8V225h101.4z">
+                    </path>
+                    <path
+                        d="M232.8 254c4.6 0 8.3-3.7 8.3-8.3s-3.7-8.3-8.3-8.3-8.3 3.7-8.3 8.3 3.7 8.3 8.3 8.3zm0-14.9c3.6 0 6.6 2.9 6.6 6.6s-2.9 6.6-6.6 6.6-6.6-2.9-6.6-6.6 3-6.6 6.6-6.6z">
+                    </path>
+                </svg>
+                {% else %}
+                <div class="customcontainer_img">
+                    <img id="img" src="{{ block.settings.img |  img_url: 'master' }}" alt="Example Image">
+                </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+{% schema %}
+{
+"name":"Custom Hero Slider",
+"settings": [
+    {
+        "type": "color_scheme",
+        "id": "color_scheme",
+        "label": "Color Scheme",
+        "default": "scheme-1"
+    },{
+        "type": "range",
+        "id": "padding_top",
+        "min": 0,
+        "max": 100,
+        "step": 4,
+        "unit": "px",
+        "label": "Padding Top",
+        "default": 36
+    },{
+        "type": "range",
+        "id": "padding_bottom",
+        "min": 0,
+        "max": 100,
+        "step": 4,
+        "unit": "px",
+        "label": "Padding Bottom",
+        "default": 36
+    },{
+        "type": "select",
+        "id": "text_position",
+        "label": "Text Position",
+        "options": [
+            {
+            "value": "left",
+            "label": "Left"
+            },
+            {
+            "value": "right",
+            "label": "Right"
+            }
+        ],
+        "default": "left"
+    }
+],
+"blocks": [
+    {
+    "type": "slide",
+    "name":"Add Hero Slider",
+    "limit": 5,
+    "settings": [
+        {
+        "type": "color_background",
+        "id": "bg_color",
+        "label": "Backgroung Color",
+        "default": "#e4e4e4"
+        },
+        {
+        "type": "text",
+        "id": "slide_up_item",
+        "label": "Slide Up Head",
+        "default": "Head"
+        },
+        {
+        "type": "text",
+        "id": "slide_content",
+        "label": "Slide Up Head",
+        "default": "Head"
+        },
+        {
+        "type": "url",
+        "id": "link",
+        "label": "Button Link"
+
+        }, {
+        "type": "text",
+        "id": "btn",
+        "label": "Button Title",
+        "default": "Button"
+        },
+        {
+        "type": "image_picker",
+        "id": "img",
+        "label": "Image"
+        }
+    ]
+}],
+"presets": [
+{
+"name": "Custom Hero Slider",
+"blocks": [
+{
+"type": "slide"
+},{
+"type": "slide"
+}
+]
+}
+]
+}
+{% endschema %}

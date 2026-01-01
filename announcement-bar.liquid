@@ -1,0 +1,267 @@
+{% style %}
+.announcement_main_section {
+padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+}
+
+@media (max-width: 767px) {
+.announcement_main_section {
+padding-top: {{ section.settings.padding_top }}px;
+padding-bottom: {{ section.settings.padding_bottom }}px;
+}
+}
+.announcement_content {
+{% if section.settings.social_media != blank or section.settings.language != blank or section.settings.country != blank
+%} width: 50%;
+{% else %} width: 100%;
+{% endif %}
+}
+{% endstyle %}
+
+<link href="{{ 'announcement-bar.css' | asset_url }}" type="text/css" rel="stylesheet">
+
+<div
+  class="announcement_main_section color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding">
+  <section class="main-content">
+    <div class="announcement_inner_section">
+      {% if section.settings.social_media != blank %}
+      <div class="announce_social_media_section">
+        <ul class="list-unstyled list-social{% if class %} {{ class}}{% endif %}" role="list">
+          {%- if settings.social_facebook_link != blank -%}
+          <li class="list-social__item">
+            <a href="{{ settings.social_facebook_link }}" class="link list-social__link">
+              {%- render 'icon-facebook' -%}
+            </a>
+          </li>
+          {%- endif -%}
+          {%- if settings.social_instagram_link != blank -%}
+          <li class="list-social__item">
+            <a href="{{ settings.social_instagram_link }}" class="link list-social__link">
+              {%- render 'icon-instagram' -%}
+            </a>
+          </li>
+          {%- endif -%}
+          {%- if settings.social_youtube_link != blank -%}
+          <li class="list-social__item">
+            <a href="{{ settings.social_youtube_link }}" class="link list-social__link">
+              {%- render 'icon-youtube' -%}
+            </a>
+          </li>
+          {%- endif -%}
+          {%- if settings.social_tiktok_link != blank -%}
+          <li class="list-social__item">
+            <a href="{{ settings.social_tiktok_link }}" class="link list-social__link">
+              {%- render 'icon-tiktok' -%}
+            </a>
+          </li>
+          {%- endif -%}
+          {%- if settings.social_twitter_link != blank -%}
+          <li class="list-social__item">
+            <a href="{{ settings.social_twitter_link }}" class="link list-social__link">
+              {%- render 'icon-twitter' -%}
+            </a>
+          </li>
+          {%- endif -%}
+          {%- if settings.social_pinterest_link != blank -%}
+          <li class="list-social__item">
+            <a href="{{ settings.social_pinterest_link }}" class="link list-social__link">
+              {%- render 'icon-pinterest' -%}
+            </a>
+          </li>
+          {%- endif -%}
+          {%- if settings.social_snapchat_link != blank -%}
+          <li class="list-social__item">
+            <a href="{{ settings.social_snapchat_link }}" class="link list-social__link">
+              {%- render 'icon-snapchat' -%}
+            </a>
+          </li>
+          {%- endif -%}
+          {%- if settings.social_tumblr_link != blank -%}
+          <li class="list-social__item">
+            <a href="{{ settings.social_tumblr_link }}" class="link list-social__link">
+              {%- render 'icon-tumblr' -%}
+            </a>
+          </li>
+          {%- endif -%}
+          {%- if settings.social_vimeo_link != blank -%}
+          <li class="list-social__item">
+            <a href="{{ settings.social_vimeo_link }}" class="link list-social__link">
+              {%- render 'icon-vimeo' -%}
+            </a>
+          </li>
+          {%- endif -%}
+        </ul>
+      </div>
+      {% endif %}
+      <div class="announcement_content">
+        {% for block in section.blocks %}
+        <div class="announcement_main_content">
+          <div class="announce_inner_section">
+            <div class="inner_content">
+              {% assign country_code = localization.country.iso_code %}
+              {% assign language_code = localization.language.iso_code %}
+
+                  {% if language_code == 'fr' %}
+                    <p>{{ block.settings.fr_content }}</p>
+                  {% elsif language_code == 'de' %}
+                    <p>{{ block.settings.de_content }}</p>
+                  {% else %}
+                    <p>{{ block.settings.content }}</p>
+                  {% endif %}
+
+                  {% if country_code == 'EUR' %}
+                    <p>213546</p>
+                  {% endif %}
+
+              {% if block.settings.btn_url != blank %}
+              <a class="inner_btn" href="{{ block.settings.btn_url }}">{{ block.settings.btn_content }}</a>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      {% if section.settings.language != blank or section.settings.country != blank %}
+      <div class="annoncement_country_language_selector">
+        {% if section.settings.country != blank %}
+        <div class="country_main_form">
+          <localization-form class="small-hide medium-hide">
+            {%- form 'localization'
+            , id: 'AnnouncementCountryForm'
+            , class: 'localization-form' -%}
+            <div>
+              {% if section.settings.country_title != blank %}
+              <h2 class="visually-hidden" id="AnnouncementCountryLabel">{{ 'localization.country_label' | t }}</h2>
+              {% endif %}
+              {%- render 'country-localization'
+              , localPosition: 'AnnouncementCountry' -%}
+            </div>
+            {%- endform -%}
+          </localization-form>
+        </div>
+        {% endif %}
+        {% if section.settings.language != blank %}
+        <div class="language_localization">
+          <localization-form class="small-hide medium-hide">
+            {%- form 'localization'
+            , id: 'AnnouncementLanguageForm'
+            , class: 'localization-form' -%}
+            <div>
+              {% if section.settings.language_title != blank %}
+              <h2 class="visually-hidden" id="AnnouncementLanguageLabel">{{ 'localization.language_label' | t }}</h2>
+              {% endif %}
+              {%- render 'language-localization'
+              , localPosition: 'AnnouncementLanguage' -%}
+            </div>
+            {%- endform -%}
+          </localization-form>
+        </div>
+        {% endif %}
+      </div>
+      {% endif %}
+    </div>
+  </section>
+</div>
+
+<script src="{{ 'announcement-bar.js' | asset_url }}" defer="defer"></script>
+
+{% schema %}
+{
+"name": "Custom Announcement",
+"settings": [
+{
+"type": "color_scheme",
+"id": "color_scheme",
+"label": "Color Scheme",
+"default": "scheme-3"
+},
+{
+"type": "range",
+"id": "padding_top",
+"min": 0,
+"max": 100,
+"step": 5,
+"unit": "px",
+"label": "Padding Top",
+"default": 5
+},
+{
+"type": "range",
+"id": "padding_bottom",
+"min": 0,
+"max": 100,
+"step": 5,
+"unit": "px",
+"label": "Padding Bottom",
+"default": 5
+},
+{
+"type": "checkbox",
+"id": "social_media",
+"label": "Social Media"
+}, {
+"type": "checkbox",
+"id": "country",
+"label": "Country Label"
+}, {
+"type": "checkbox",
+"id": "country_title",
+"label": "Country Title"
+}, {
+"type": "checkbox",
+"id": "language",
+"label": "laungage Label"
+}, {
+"type": "checkbox",
+"id": "language_title",
+"label": "Country Title"
+}
+],
+"blocks": [
+{
+"type": "slide",
+"name": "Announcement",
+"limit": 5,
+"settings": [
+{
+"type": "text",
+"id": "content",
+"label": "Default Content",
+"default": "Welcome to our default store."
+},
+{
+"type": "text",
+"id": "fr_content",
+"label": "France Content",
+"default": "Welcome to our France store."
+},
+{
+"type": "text",
+"id": "de_content",
+"label": "German Content",
+"default": "Welcome to our German store."
+}, {
+"type": "url",
+"id": "btn_url",
+"label": "Button URL"
+}, {
+"type": "text",
+"id": "btn_content",
+"label": "Button Content",
+"default": "Button"
+}
+]
+}
+],
+"presets": [
+{
+"name": "Custom Announcement",
+"blocks": [
+{
+"type": "slide"
+}
+]
+}
+]
+}
+{% endschema %}

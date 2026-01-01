@@ -1,0 +1,57 @@
+<script src="{{ 'cart-drawer.js' | asset_url }}" defer="defer"></script>
+
+<div class="loader"></div>
+<button class="compare-button">
+  <div class="compare_icon">
+    <svg
+      width="18px"
+      height="18px"
+      viewBox="0 0 18 18"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg">
+      <path d="M1.5 6.74994H7.1895L5.46975 8.46969C5.39812 8.53887 5.34098 8.62163 5.30167 8.71314C5.26237 8.80464 5.24168 8.90305 5.24081 9.00264C5.23995 9.10222 5.25892 9.20098 5.29663 9.29315C5.33434 9.38533 5.39003 9.46907 5.46045 9.53948C5.53087 9.6099 5.61461 9.66559 5.70678 9.7033C5.79896 9.74102 5.89772 9.75999 5.9973 9.75913C6.09689 9.75826 6.1953 9.73757 6.2868 9.69827C6.37831 9.65896 6.46106 9.60182 6.53025 9.53019L9.53025 6.53019C9.67085 6.38954 9.74984 6.19881 9.74984 5.99994C9.74984 5.80107 9.67085 5.61033 9.53025 5.46969L6.53025 2.46969C6.46106 2.39806 6.37831 2.34092 6.2868 2.30161C6.1953 2.26231 6.09689 2.24162 5.9973 2.24075C5.89772 2.23989 5.79896 2.25886 5.70678 2.29657C5.61461 2.33428 5.53087 2.38997 5.46045 2.46039C5.39003 2.53081 5.33434 2.61455 5.29663 2.70672C5.25892 2.7989 5.23995 2.89766 5.24081 2.99724C5.24168 3.09682 5.26237 3.19524 5.30167 3.28674C5.34098 3.37825 5.39812 3.461 5.46975 3.53019L7.1895 5.24994H1.5C1.30109 5.24994 1.11032 5.32896 0.96967 5.46961C0.829018 5.61026 0.75 5.80103 0.75 5.99994C0.75 6.19885 0.829018 6.38962 0.96967 6.53027C1.11032 6.67092 1.30109 6.74994 1.5 6.74994Z" fill="rgb(var(--color-button-text))"></path>
+      <path d="M16.5001 11.2501H10.8106L12.5303 9.53031C12.667 9.38886 12.7425 9.19941 12.7408 9.00276C12.7391 8.80611 12.6603 8.618 12.5212 8.47895C12.3821 8.33989 12.194 8.26101 11.9974 8.25931C11.8007 8.2576 11.6113 8.33319 11.4698 8.46981L8.46983 11.4698C8.32923 11.6105 8.25024 11.8012 8.25024 12.0001C8.25024 12.1989 8.32923 12.3897 8.46983 12.5303L11.4698 15.5303C11.6113 15.6669 11.8007 15.7425 11.9974 15.7408C12.194 15.7391 12.3821 15.6602 12.5212 15.5212C12.6603 15.3821 12.7391 15.194 12.7408 14.9974C12.7425 14.8007 12.667 14.6113 12.5303 14.4698L10.8106 12.7501H16.5001C16.699 12.7501 16.8898 12.671 17.0304 12.5304C17.1711 12.3897 17.2501 12.199 17.2501 12.0001C17.2501 11.8011 17.1711 11.6104 17.0304 11.4697C16.8898 11.3291 16.699 11.2501 16.5001 11.2501Z" fill="rgb(var(--color-button-text))"></path>
+    </svg>
+  </div>
+  <p>Compare
+    <span class="compare_product_count"></span>
+  </p>
+</button>
+<div class="comparison_main_section">
+  <div id="comparison-section">
+    <div class="comparison_svg">
+      <svg
+        class="compare_popup_close"
+        width="25px"
+        height="25px"
+        viewBox="-0.5 0 25 25"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg">
+        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+        <g
+          id="SVGRepo_tracerCarrier"
+          stroke-linecap="round"
+          stroke-linejoin="round"></g>
+        <g id="SVGRepo_iconCarrier">
+          <path
+            d="M3 21.32L21 3.32001"
+            stroke="rgb(var(--color-foreground))"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"></path>
+          <path
+            d="M3 3.32001L21 21.32"
+            stroke="rgb(var(--color-foreground))"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"></path>
+        </g>
+      </svg>
+    </div>
+    <div class="comparison-main-products"></div>
+  </div>
+  <button id="product-all-comparison">Compare</button>
+  <button id="clear-comparison">Clear All</button>
+</div>
+
+<div class="main_all_products"></div>

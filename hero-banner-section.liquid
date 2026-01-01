@@ -1,0 +1,417 @@
+{% style %}
+  .main_image_banner_section {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+  @media (max-width: 767px) {
+    .main_image_banner_section {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+
+  .video_section {
+    height: {% if section.settings.banner_img_height == '400px' %} 400px;
+  {% endif %}
+  {% if section.settings.banner_img_height == '500px' %} 500px;
+{% endif %}
+{% if section.settings.banner_img_height == '600px' %} 600px;
+{% endif %}
+{% if section.settings.banner_img_height == '700px' %} 700px;
+{% endif %}
+{% if section.settings.banner_img_height == '850px' %} 850px;
+{% endif %}
+{% if section.settings.banner_img_height == '100vh' %} 100vh;
+{% endif %}
+}
+.image_section {
+  width: 100%;
+  height: {% if section.settings.banner_img_height == '400px' %} 400px;
+{% endif %}
+{% if section.settings.banner_img_height == '500px' %} 500px;
+{% endif %}
+{% if section.settings.banner_img_height == '600px' %} 600px;
+{% endif %}
+{% if section.settings.banner_img_height == '700px' %} 700px;
+{% endif %}
+{% if section.settings.banner_img_height == '850px' %} 850px;
+{% endif %}
+{% if section.settings.banner_img_height == '100vh' %} 100vh;
+{% endif %}
+}
+
+{% for block in section.blocks %}
+  .image_overlay.block-{{ block.id }} {
+    background-color: {{ block.settings.img_gradient_color }};
+    opacity: {{ block.settings.image_gradient_darkness }}%;
+  }
+
+  .image_banner_text_block.block-{{ block.id }} {
+    {% if block.settings.content_position == 'top_left' %} top: 0;
+    left: 0;
+  {% endif %}
+  {% if block.settings.content_position == 'top_center' %} top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+{% endif %}
+{% if block.settings.content_position == 'top_right' %} right: 0;
+top: 0;
+{% endif %}
+{% if block.settings.content_position == 'middle_left' %} left: 0;
+top: 50%;
+transform: translateY(-50%);
+{% endif %}
+{% if block.settings.content_position == 'middle_center' %} left: 50%;
+top: 50%;
+transform: translate(-50%, -50%);
+{% endif %}
+{% if block.settings.content_position == 'middle_right' %} right: 0;
+top: 50%;
+transform: translateY(-50%);
+{% endif %}
+{% if block.settings.content_position == 'bottom_left' %} left: 0;
+bottom: 0;
+{% endif %}
+{% if block.settings.content_position == 'bottom_center' %} left: 50%;
+bottom: 0;
+transform: translateX(-50%);
+{% endif %}
+{% if block.settings.content_position == 'bottom_right' %} right: 0;
+bottom: 0;
+{% endif %}
+}
+
+.banner_btn_block.block-{{ block.id }} {
+  justify-content: {% if block.settings.text_position == 'left' %} left {% endif %}
+{% if block.settings.text_position == 'center' %} center {% endif %}
+{% if block.settings.text_position == 'right' %} right {% endif %};
+}
+
+.image_content_section.block-{{ block.id }} {
+  text-align: {% if block.settings.text_position == 'left' %} left;
+{% endif %}
+{% if block.settings.text_position == 'center' %} center;
+{% endif %}
+{% if block.settings.text_position == 'right' %} right;
+{% endif %}
+}
+
+.banner_mobile_section.block-{{ block.id }} {
+  display: none;
+}
+
+.banner_main_section.block-{{ block.id }} {
+  display: block;
+}
+
+{% if block.settings.video_section != blank %}
+  .image_section.banner_main_section.block-{{ block.id }} {
+    display: none;
+  }
+{% endif %}
+
+{% if block.settings.video_mobile_section != blank or block.settings.banner_mobile_img != blank %}
+  @media (max-width: 551px) {
+    .banner_main_section.block-{{ block.id }} {
+      display: none;
+    }
+
+    .banner_mobile_section.block-{{ block.id }} {
+      display: block;
+    }
+  }
+{% endif %}
+{% endfor %}
+.image_section svg.my-custom-class {
+  width: 100%;
+  height: 100%;
+}
+{% endstyle %}
+
+<div class="main_image_banner_section">
+  <div class="inner_image_banner_section color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding">
+    {% for block in section.blocks %}
+      <div class="image_banner_section_main_inner">
+        {% if block.settings.video_section == blank and block.settings.banner_img == blank %}
+          <div class="image_section">
+            {{ 'lifestyle-1' | placeholder_svg_tag: 'my-custom-class' }}
+          </div>
+        {% endif %}
+        {% if block.settings.video_section != blank %}
+          <div class="video_section banner_main_section block-{{ block.id }}">
+            <video
+              muted
+              loop
+              id="myVideoBackground"
+              {% if block.settings.video-checkbox %}
+              src="{{ block.settings.video_section.sources[1].url }}"
+              autoplay
+              {% endif %}
+              type="video/mp4"
+              width="100%"></video>
+          </div>
+        {% endif %}
+        {% if block.settings.video_mobile_section != blank %}
+          <div class="video_section banner_mobile_section block-{{ block.id }}">
+            <video
+              muted
+              loop
+              id="myVideoBackground"
+              {% if block.settings.video-checkbox %}
+              src="{{ block.settings.video_mobile_section.sources[1].url }}"
+              autoplay
+              {% endif %}
+              type="video/mp4"
+              width="100%"></video>
+          </div>
+        {% endif %}
+        {% if block.settings.banner_img != blank %}
+          <div class="image_section banner_main_section block-{{ block.id }}">
+            <img src="{{ block.settings.banner_img | img_url: 'master' }}" alt="Banner Image">
+          </div>
+        {% endif %}
+        {% if block.settings.banner_mobile_img != blank %}
+          <div class="image_section banner_mobile_section block-{{ block.id }}">
+            <img src="{{ block.settings.banner_mobile_img | img_url: 'master' }}" alt="Banner Mobile Image">
+          </div>
+        {% endif %}
+        <div class="image_overlay block-{{ block.id }}"></div>
+        <div class="image_banner_text_block block-{{ block.id }}">
+          <div class="banner_section_content">
+            <div class="image_content_section block-{{ block.id }}">
+              {% if block.settings.subheading != blank %}
+                <h4 class="main_subhead">{{ block.settings.subheading }}</h4>
+              {% endif %}
+              {% if block.settings.heading != blank %}
+                <h2 class="main_head">{{ block.settings.heading }}</h2>
+              {% endif %}
+              {% if block.settings.content != blank %}
+                <p class="inner_banner_content">{{ block.settings.content }}</p>
+              {% endif %}
+              <div class="banner_btn_block block-{{ block.id }}">
+                {% if block.settings.btn_link != blank %}
+                  <button class="btn_inner_content">
+                    <a href="{{ block.settings.btn_link }}" class="block_btn">
+                      {{ block.settings.btn_text }}
+                    </a>
+                  </button>
+                {% endif %}
+                {% if block.settings.btn_link_two != blank %}
+                  <button class="btn_inner_content">
+                    <a href="{{ block.settings.btn_link_two }}" class="block_btn">
+                      {{ block.settings.btn_text_two }}
+                    </a>
+                  </button>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+
+{% schema %}
+  {
+    "name": "Hero Banner Section",
+    "settings": [
+      {
+        "type": "color_scheme",
+        "id": "color_scheme",
+        "label": "Color Scheme",
+        "default": "scheme-1"
+      }, {
+        "type": "range",
+        "id": "padding_top",
+        "min": 0,
+        "max": 100,
+        "step": 4,
+        "unit": "px",
+        "label": "Padding Top",
+        "default": 36
+      }, {
+        "type": "range",
+        "id": "padding_bottom",
+        "min": 0,
+        "max": 100,
+        "step": 4,
+        "unit": "px",
+        "label": "Padding Bottom",
+        "default": 36
+      }, {
+        "type": "select",
+        "id": "banner_img_height",
+        "label": "Banner image Height",
+        "options": [
+          {
+            "label": "Extra Small",
+            "value": "400px"
+          },
+          {
+            "label": "Small",
+            "value": "500px"
+          },
+          {
+            "label": "Medium",
+            "value": "600px"
+          },
+          {
+            "label": "Large",
+            "value": "700px"
+          }, {
+            "label": "Extra Large",
+            "value": "850px"
+          }, {
+            "label": "Full Screen",
+            "value": "100vh"
+          }
+        ],
+        "default": "500px"
+      }
+    ],
+    "blocks": [
+      {
+        "name": "Banner Section",
+        "type": "slideshow",
+        "limit": 5,
+        "settings": [
+          {
+            "type": "image_picker",
+            "id": "banner_img",
+            "label": "Banner Image"
+          },
+          {
+            "type": "image_picker",
+            "id": "banner_mobile_img",
+            "label": "Banner Mobile Image"
+          },
+          {
+            "type": "checkbox",
+            "id": "video-checkbox",
+            "label": "You want to video on slider"
+          },
+          {
+            "type": "video",
+            "id": "video_section",
+            "label": "Video Banner"
+          }, {
+            "type": "video",
+            "id": "video_mobile_section",
+            "label": "Video Mobile Banner"
+          }, {
+            "type": "color",
+            "id": "img_gradient_color",
+            "label": "Image Gradient Color",
+            "default": "rgb(0, 0, 0)"
+          }, {
+            "type": "range",
+            "id": "image_gradient_darkness",
+            "min": 0,
+            "max": 100,
+            "step": 10,
+            "unit": "%",
+            "label": "Image Gradient Darkness",
+            "default": 20
+          }, {
+            "type": "select",
+            "id": "content_position",
+            "label": "Content Position",
+            "options": [
+              {
+                "label": "Top Left",
+                "value": "top_left"
+              },
+              {
+                "label": "Top Center",
+                "value": "top_center"
+              },
+              {
+                "label": "Top Right",
+                "value": "top_right"
+              },
+              {
+                "label": "Middle Left",
+                "value": "middle_left"
+              }, {
+                "label": "Middle Center",
+                "value": "middle_center"
+              }, {
+                "label": "Middle Right",
+                "value": "middle_right"
+              }, {
+                "label": "Bottom Left ",
+                "value": "bottom_left"
+              }, {
+                "label": "Bottom Center",
+                "value": "bottom_center"
+              }, {
+                "label": "Bottom Right",
+                "value": "bottom_right"
+              }
+            ],
+            "default": "middle_center"
+          }, {
+            "type": "select",
+            "id": "text_position",
+            "label": "Text Position",
+            "options": [
+              {
+                "label": "Left",
+                "value": "left"
+              }, {
+                "label": "Center",
+                "value": "center"
+              }, {
+                "label": "Right",
+                "value": "right"
+              }
+            ],
+            "default": "left"
+          }, {
+            "type": "text",
+            "id": "subheading",
+            "label": "Sub heading",
+            "default": "Sub heading"
+          }, {
+            "type": "text",
+            "id": "heading",
+            "label": "Heading",
+            "default": "Heading"
+          }, {
+            "type": "text",
+            "id": "content",
+            "label": "Content",
+            "default": "Content of image banner"
+          }, {
+            "type": "url",
+            "id": "btn_link",
+            "label": "Button Link"
+          }, {
+            "type": "text",
+            "id": "btn_text",
+            "label": "Button Text"
+          }, {
+            "type": "url",
+            "id": "btn_link_two",
+            "label": "Second Button Link"
+          }, {
+            "type": "text",
+            "id": "btn_text_two",
+            "label": "Second Button Text"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "Hero Banner",
+        "blocks": [
+          {
+            "type": "slideshow"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

@@ -1,0 +1,203 @@
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+{% comment %} <link href="{{ 'main-account.css' | asset_url }}" type="text/css" rel="stylesheet"> {% endcomment %}
+
+{{ 'main-account.css' | asset_url | stylesheet_tag }}
+
+
+{%- style -%}
+  .main_customer_form {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .main_customer_form {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+
+<div class="main_customer_form color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding">
+  <div class="customer-account-main-block">
+    <div class="account-main-section">
+      <div class="account-left-side">
+        <div class="account_dashboard_block">
+          <div class="account_main_detail">
+            <h3 class="account">{{ customer.name }}</h3>
+            <span class="account_main">{{ customer.email }}</span>
+          </div>
+          <ul class="nav nav-tabs" role="tablist" id="myTab">
+            <li role="presentation" class="my-account-inner active">
+              <svg class="account_svg" width="20px" height="20px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+              <a href="#account-details" aria-controls="account-details" role="tab" data-toggle="tab" class="my-account-title">Account Details</a>
+              </li>
+            <li role="presentation" class="my-account-inner">
+              <svg class="account_svg" width="20px" height="20px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+              <a href="#orders" aria-controls="orders" role="tab" data-toggle="tab" class="my-account-title">Orders</a>
+              <div class="account_count">
+                {{ customer.orders_count }}
+              </div>
+            </li>
+            <li role="presentation" class="my-account-inner">
+              <svg class="account_svg" width="20px" height="20px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+              <a href="#addresses" aria-controls="addresses" role="tab" data-toggle="tab" class="my-account-title">Addresses</a>
+              <div class="account_count">
+                {{ customer.addresses_count }}
+              </div>
+            </li>
+            <li role="presentation" class="my-account-inner">
+              <svg class="account_svg" width="20px" height="20px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+              <a href="{{ routes.account_logout_url }}" class="my-account-title">Logout</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="account-right-side">
+        <div role="tabpanel" class="tab-pane active" id="account-details">
+          <div class="account_main_section">
+            <h2 class="account-details">profile information</h2>
+          </div>
+          
+          <div class="customer_details">
+            <div class="customer_row">
+              <label class="customer_head">FirstName:</label>
+              <span class="customer_info">{{ customer.first_name }}</span>
+            </div>
+            <div class="customer_row">
+              <label class="customer_head">LastName:</label>
+              <span class="customer_info">{{ customer.last_name }}</span>
+            </div>
+            <div class="customer_row content">
+              <label class="customer_head">email:</label>
+              <span class="customer_info email">{{ customer.email }}</span>
+            </div>
+            <div class="customer_row">
+              <label class="customer_head">Phone No.:</label>
+              <span class="customer_info">{{ customer.default_address.phone }}</span>
+            </div>
+          </div>
+        </div>
+        <div role="tabpanel" class="tab-pane" id="orders">
+          <div class="account_main_section">
+            <h2 class="orders">Orders</h2>
+          </div>
+          {% if customer.orders.size > 0 %}
+            <div class="customer_main_section">
+              {% for order in customer.orders %}
+                <div class="customer-order">
+                  <div class="customer_order_title">
+                    <div class="customer_head">
+                        <h4>Order:</h4>
+                        <span id="row_order" class="customer_content order">{{ order.name }}</span>
+                      <div class="order_btns">
+                        <span id="row_order" class="customer_content cancel">cancelled</span>
+                        <span id="row_order" class="customer_content authorized">Authorized</span>
+                      </div>
+                    </div>
+                    <span id="row_order" class="customer_content date">{{ order.created_at | time_tag: format: 'date' }}</span>
+                  </div>
+                  <div class="order_info">
+                    <div class="order_inner">
+                      <h4>Item Count:</h4>
+                      <span id="row_order" class="customer_content count">{{ order.item_count }}</span>
+                    </div>
+                    <div class="order_inner">
+                      <h4>Grant Total:</h4>
+                      <span id="row_order" class="customer_content price">{{ order.total_price |  money }}</span>
+                    </div>
+                  </div>
+                  <span id="row_order" class="customer_content btn">
+                    <a class="view_order" href="{{ order.customer_url }}" aria-label="{{ 'customer.orders.order_number_link' | t: number: order.name }}">view Details</a>
+                  </span>
+                </div>
+              {% endfor %}
+            </div>
+            {% else %}
+              <p>You haven't placed any orders yet.</p>
+          {% endif %}
+        </div>
+        <div role="tabpanel" class="tab-pane" id="addresses">
+          <div class="account_main_section">
+            <h2 class="customer-addresses">Customer Addresses</h2>
+          </div>
+            
+          <div class="customer_addresses">
+            {% for address in customer.addresses %}
+              <div class="address_list">
+                <div class="inner_address">
+                  {%- if address == customer.default_address -%}
+                    <p class="default_label">default</p>
+                  {%- endif -%}
+                  <div class="address_name">
+                    <span>{{ address.name }}</span>
+                  </div>
+                  <div class="address_inner">
+                    <span>{{ address.company }}</span>
+                    <span>{{ address.address1 }}</span>
+                    <span>{{ address.address2 }}</span>
+                    <span>{{ address.city }}</span>
+                    <span>{{ address.country }}</span>
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+          <div class="address_view_btn">
+            <a class="adress_view_btn_inner" href="{{ routes.account_addresses_url }}">View Customer Address</a>
+          </div>
+          </div>
+        </div>
+    </div>
+  </div>
+</div>
+
+  <script>
+    $(document).ready(function () {
+  $(function () {
+    $('a[data-toggle="tab"]').on('click', function (e) {
+      window.localStorage.setItem('activeTab', $(e.target).attr('href'));
+    });
+    var activeTab = window.localStorage.getItem('activeTab');
+    if (activeTab) {
+      $('#myTab a[href="' + activeTab + '"]').tab('show');
+      window.localStorage.removeItem("activeTab");
+    }
+  });
+});
+  </script>
+
+  {% schema %}
+  {
+    "name": "Main Account",
+    "settings": [
+      {
+        "type": "color_scheme",
+        "id": "color_scheme",
+        "label": "Color Scheme",
+        "default": "scheme-1"
+      }, {
+        "type": "range",
+        "id": "padding_top",
+        "min": 0,
+        "max": 100,
+        "step": 4,
+        "unit": "px",
+        "label": "Padding Top",
+        "default": 36
+      }, {
+        "type": "range",
+        "id": "padding_bottom",
+        "min": 0,
+        "max": 100,
+        "step": 4,
+        "unit": "px",
+        "label": "Padding Bottom",
+        "default": 36
+      }
+    ]
+  }
+  {% endschema %}

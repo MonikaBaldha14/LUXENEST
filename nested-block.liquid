@@ -1,0 +1,60 @@
+<section class="custom-section" style="background-color: {{ settings.background_color }}">
+    <h2>{{ settings.title }}</h2>
+    
+    {% for block in section.blocks %}
+      {% case block.type %}
+        {% when 'image' %}
+          <img src="{{ block.settings.image | img_url: 'large' }}" alt="{{ block.settings.alt_text }}">
+        {% when 'text' %}
+          <p>{{ block.settings.content }}</p>
+      {% endcase %}
+    {% endfor %}
+  </section>
+
+{% schema %}
+    {
+      "name": "Custom Section",
+      "settings": [
+        {
+          "type": "text",
+          "label": "Title",
+          "id": "title",
+          "default": "Welcome to Our Store"
+        }
+      ],
+      "blocks": [
+        {
+          "type": "image",
+          "name": "Image Block",
+          "settings": [
+            {
+              "type": "image_picker",
+              "label": "Image",
+              "id": "image"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "name": "Text Block",
+          "settings": [
+            {
+              "type": "textarea",
+              "label": "Content",
+              "id": "content",
+              "default": "This is some text."
+            }
+          ]
+        }
+      ],
+      "presets": [
+        {
+          "name": "Default",
+          "category": "Custom"
+        }
+      ]
+    }
+    {% endschema %}
+    
+
+    

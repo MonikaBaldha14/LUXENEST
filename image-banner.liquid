@@ -1,0 +1,234 @@
+<style>
+  .image_banner_main {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media (max-width: 767px) {
+    .image_banner_main {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+</style>
+
+<div class="image_banner_main color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding">
+  <div class="main_content">
+    <div class="image_banner_section">
+      <div class="image_section">
+        {% if section.settings.img != blank %}
+          <img src="{{ section.settings.img |  img_url: 'master' }}" alt="Image Section">
+        {% else %}
+          {{ 'lifestyle-1' | placeholder_svg_tag: 'my-custom-class' }}
+        {% endif %}
+      </div>
+      <div class="image_overlay" style="background-color: {{ section.settings.img_gradient_color }}; opacity: {{ section.settings.image_gradient_darkness }}%"></div>
+      <div class="text_content_section">
+        {% for block in section.blocks %}
+          {% case block.type %}
+            {% when 'heading' %}
+              <h2 class="banner__heading">
+                {{ block.settings.heading }}
+              </h2>
+            {% when 'text' %}
+              <div class="banner__text">
+                <p>{{ block.settings.text }}</p>
+              </div>
+            {% when 'buttons' %}
+              <div class="banner__buttons">
+                {% if block.settings.button_label_1 != blank %}
+                  <a
+                    {% if block.settings.button_link_1 == blank %}
+                    role="link"
+                    aria-disabled="true"
+                    {% else %}
+                    href="{{ block.settings.button_link_1 }}"
+                    {% endif %}
+                    class="button{% if block.settings.button_style_secondary_1 %} button--secondary{% else %} button--primary{% endif %}">
+                    {{- block.settings.button_label_1 | escape -}}
+                  </a>
+                {% endif %}
+                {% if block.settings.button_label_2 != blank %}
+                  <a
+                    {% if block.settings.button_link_2 == blank %}
+                    role="link"
+                    aria-disabled="true"
+                    {% else %}
+                    href="{{ block.settings.button_link_2 }}"
+                    {% endif %}
+                    class="button{% if block.settings.button_style_secondary_2 %} button--secondary{% else %} button--primary{% endif %}">
+                    {{- block.settings.button_label_2 | escape -}}
+                  </a>
+                {% endif %}
+              </div>
+          {% endcase %}
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+  {
+    "name": "Image Banner",
+    "settings": [
+      {
+        "type": "color_scheme",
+        "id": "color_scheme",
+        "label": "Color Scheme",
+        "default": "scheme-6"
+      },
+      {
+        "type": "range",
+        "id": "padding_top",
+        "min": 0,
+        "max": 100,
+        "step": 4,
+        "unit": "px",
+        "label": "Padding Top",
+        "default": 36
+      },
+      {
+        "type": "range",
+        "id": "padding_bottom",
+        "min": 0,
+        "max": 100,
+        "step": 4,
+        "unit": "px",
+        "label": "Padding Bottom",
+        "default": 36
+      },
+      {
+        "type": "image_picker",
+        "id": "img",
+        "label": "Image"
+      }, {
+        "type": "color",
+        "id": "img_gradient_color",
+        "label": "Image Gradient Color",
+        "default": "rgb(0, 0, 0)"
+      }, {
+        "type": "range",
+        "id": "image_gradient_darkness",
+        "min": 0,
+        "max": 100,
+        "step": 10,
+        "unit": "%",
+        "label": "Image Gradient Darkness",
+        "default": 20
+      }
+    ],
+    "blocks": [
+      {
+        "type": "heading",
+        "name": "Heading Name",
+        "limit": 1,
+        "settings": [
+          {
+            "type": "inline_richtext",
+            "id": "heading",
+            "default": "Image banner",
+            "label": "Heading"
+          }, {
+            "type": "select",
+            "id": "heading_size",
+            "options": [
+              {
+                "value": "h2",
+                "label": "Option 1"
+              }, {
+                "value": "h1",
+                "label": "Option 2"
+              }, {
+                "value": "h0",
+                "label": "Option 3"
+              }
+            ],
+            "default": "h1",
+            "label": "Haeding size"
+          }
+        ]
+      }, {
+        "type": "text",
+        "name": "Text",
+        "limit": 1,
+        "settings": [
+          {
+            "type": "inline_richtext",
+            "id": "text",
+            "default": "Give customers details about the banner image(s) or content on the template.",
+            "label": "Text"
+          }, {
+            "type": "select",
+            "id": "text_style",
+            "options": [
+              {
+                "value": "body",
+                "label": "Option 1"
+              }, {
+                "value": "subtitle",
+                "label": "Option 2"
+              }, {
+                "value": "caption-with-letter-spacing",
+                "label": "Option 3"
+              }
+            ],
+            "default": "body",
+            "label": "Text Style"
+          }
+        ]
+      }, {
+        "type": "buttons",
+        "name": "Button Name",
+        "limit": 1,
+        "settings": [
+          {
+            "type": "text",
+            "id": "button_label_1",
+            "default": "Button label",
+            "label": "Button Label 1"
+          },
+          {
+            "type": "url",
+            "id": "button_link_1",
+            "label": "Button Link 1"
+          },
+          {
+            "type": "checkbox",
+            "id": "button_style_secondary_1",
+            "default": false,
+            "label": "Button style secondary 1"
+          },
+          {
+            "type": "text",
+            "id": "button_label_2",
+            "label": "Button Label 2"
+          }, {
+            "type": "url",
+            "id": "button_link_2",
+            "label": "Button Link 2"
+          }, {
+            "type": "checkbox",
+            "id": "button_style_secondary_2",
+            "default": false,
+            "label": "Button Style secondary 2"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "Image Banner",
+        "blocks": [
+          {
+            "type": "heading"
+          }, {
+            "type": "text"
+          }, {
+            "type": "buttons"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

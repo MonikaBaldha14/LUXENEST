@@ -1,0 +1,60 @@
+<div class="main_before_after_section">
+    <div class="inner_before_after_section">
+        <div class="before-after-section">
+        {% if section.settings.before_img != blank %}
+          <img
+            class="img before-img"
+            src="{{ section.settings.before_img |  img_url: 'master' }}"
+            alt="before" />
+        {% else %}
+          <img
+            class="img before-img"
+            src="https://cdn.shopify.com/s/files/1/0533/2089/files/placeholder-images-collection-4_large.png?v=1530129177" 
+            alt="before" />
+        {% endif %}
+        {% if section.settings.before %}
+          <div class="before_after_section before_title">
+            <h4>{{ section.settings.before }}</h4>
+          </div>
+        {% endif %}
+
+        {% if section.settings.after_img != blank %}
+          <img
+            class="img after-img"
+            src="{{ section.settings.after_img |  img_url: 'master' }}"
+            alt="after" />
+        {% else %}
+          <img
+            class="img after-img"
+            src="https://cdn.shopify.com/s/files/1/0533/2089/files/placeholder-images-collection-3_large.png?v=1530129113" alt="after" />
+        {% endif %}
+        <div class="before_after_section after_title">
+          <h4>{{ section.settings.after }}</h4>
+        </div>
+        <input
+          type="range"
+          min="0"
+          max="100"
+          value="{{ section.settings.img_range }}"
+          class="img_slider"
+          name="slider"
+          id="slider" />
+      </div>
+    </div>
+</div>
+
+{% schema %}
+{
+    "name": "Before-After Section",
+    "settings": [
+        ],
+        "presets": [
+            {
+                "name": "Before-After Section"
+            }
+        ]
+}
+{% endschema %}
+
+
+

@@ -1,0 +1,130 @@
+<style>
+  .sale_timer_main_block {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media (max-width: 767px) {
+    .sale_timer_main_block {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+</style>
+
+<div class="sale_timer_main_block">
+  <section class="main-content" id="saler_timer">
+    <div class="saler_timer_section color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding">
+      <div class="sale_timer_main" style="{% if section.settings.timer_img != blank %}
+        background-image: url({{ section.settings.timer_img |  img_url: 'master' }})
+        {%  else %}
+        background-color: rgb(var(--color-background));
+      {% endif %};">
+        <div class="sale_timer_item_inner">
+          <div class="sale_timer_heading">
+            <h2>{{ section.settings.heading }}</h2>
+            {% if section.settings.btn_url != blank %}
+              <button class="btn_inner_content">
+                <a href="{{ section.settings.btn_url }}">{{ section.settings.btn_txt }}</a>
+              </button>
+            {% endif %}
+          </div>
+          <div class="image_overlay" style="background-color: {{ section.settings.img_gradient_color }}; opacity: {{ section.settings.image_gradient_darkness }}%"></div>
+          <div class="sale_countdown">
+            <div id="countdown">
+              <ul class="sale_coutdown_flex">
+                <li class="sale_countdown_inner">
+                  <span id="days"></span>
+                  <span class="title">days</span>
+                </li>
+                <li class="sale_countdown_inner">
+                  <span id="hours"></span>
+                  <span class="title">Hours</span>
+                </li>
+                <li class="sale_countdown_inner">
+                  <span id="minutes"></span>
+                  <span class="title">Minutes</span>
+                </li>
+                <li class="sale_countdown_inner">
+                  <span id="seconds"></span>
+                  <span class="title">Seconds</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+{% schema %}
+  {
+    "name": "Sale Timer",
+    "settings": [
+      {
+        "type": "color_scheme",
+        "id": "color_scheme",
+        "label": "Color Scheme",
+        "default": "scheme-1"
+      },
+      {
+        "type": "range",
+        "id": "padding_top",
+        "min": 0,
+        "max": 100,
+        "step": 4,
+        "unit": "px",
+        "label": "Padding Top",
+        "default": 36
+      },
+      {
+        "type": "range",
+        "id": "padding_bottom",
+        "min": 0,
+        "max": 100,
+        "step": 4,
+        "unit": "px",
+        "label": "Padding Bottom",
+        "default": 36
+      },
+      {
+        "type": "image_picker",
+        "id": "timer_img",
+        "label": "Timer Image"
+      }, {
+        "type": "color",
+        "id": "img_gradient_color",
+        "label": "Image Gradient Color",
+        "default": "rgb(0, 0, 0)"
+      }, {
+        "type": "range",
+        "id": "image_gradient_darkness",
+        "min": 0,
+        "max": 100,
+        "step": 10,
+        "unit": "%",
+        "label": "Image Gradient Darkness",
+        "default": 20
+      }, {
+        "type": "text",
+        "id": "heading",
+        "label": "Timer Head",
+        "default": "Heading"
+      }, {
+        "type": "url",
+        "id": "btn_url",
+        "label": "Button Link"
+      }, {
+        "type": "text",
+        "id": "btn_txt",
+        "label": "Button Text",
+        "default": "Button"
+      }
+    ],
+    "presets": [
+      {
+        "name": "Sale Timer"
+      }
+    ]
+  }
+{% endschema %}

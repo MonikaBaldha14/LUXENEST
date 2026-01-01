@@ -1,0 +1,162 @@
+<style>
+  .contact_main_form {
+    padding-top: {
+        {
+        section.settings.padding_top | times: 0.75 | round: 0
+      }
+    }
+
+    px;
+
+    padding-bottom: {
+        {
+        section.settings.padding_bottom | times: 0.75 | round: 0
+      }
+    }
+
+    px;
+  }
+
+  @media (max-width: 767px) {
+    .contact_main_form {
+      padding-top: {
+          {
+          section.settings.padding_top
+        }
+      }
+
+      px;
+
+      padding-bottom: {
+          {
+          section.settings.padding_bottom
+        }
+      }
+
+      px;
+    }
+  }
+</style>
+
+<div class="contact_main_form color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding">
+  <section class="main-content">
+    {% if section.settings.heading != blank or section.settings.content-inner != blank %}
+    <div class="main_section_head">
+      {% if section.settings.heading %}
+      <h2 class="heading">{{ section.settings.heading }}</h2>
+      {% endif %}
+      {% if section.settings.content-inner %}
+      {{ section.settings.content-inner }}
+      {% endif %}
+    </div>
+    {% endif %}
+
+    {% form 'contact', class: 'contact_us' %}
+    {%- if form.posted_successfully? -%}
+    <div class="form-filled-main">
+      <i class="tick_icon fa fa-check" aria-hidden="true"></i>
+      <h4 class="form_filled" tabindex="-1" autofocus>
+        Thanks for contacting us. We'll get back to you as soon as possible.
+      </h4>
+    </div>
+    {% endif %}
+    {{ form.errors | default_errors }}
+    <div class="form-floating name">
+      <label class="form_label" for="name">Name <span class="star_icon">*</span></label>
+      <input type="text" class="form-control name" name="contact[name]" id="name" placeholder="Name" required="" />
+    </div>
+    <div class="form-floating email">
+      <label class="form_label" for="email">Email <span class="star_icon">*</span></label>
+      <input type="email" class="form-control email" name="contact[email]" id="email" placeholder="Email" required="" />
+    </div>
+    <div class="form-floating phone_no">
+      <label class="form_label" for="phone">Phone No. <span class="star_icon">*</span></label>
+      <input type="phone" class="form-control phone" name="contact[phone]" id="phone" placeholder="Phone" required="" />
+    </div>
+    <div class="form-floating message">
+      <label class="form_label" for="message">Your Request</label>
+      <textarea class="form-control message" name="contact[body]" rows="5" id="message" placeholder="Your Request"
+        required=""></textarea>
+    </div>
+    <div class="form-floating submit">
+      <input type="submit" class="submit-form" value="Submit" />
+    </div>
+
+    {% endform %}
+</div>
+</section>
+</div>
+
+
+<script>
+  const rmCheck = document.getElementById("rememberMe"),
+    emailInput = document.getElementById("email");
+
+  if (localStorage.checkbox && localStorage.checkbox !== "") {
+    rmCheck.setAttribute("checked", "checked");
+    emailInput.value = localStorage.username;
+  } else {
+    rmCheck.removeAttribute("checked");
+    emailInput.value = "";
+  }
+
+  function lsRememberMe() {
+    if (rmCheck.checked && emailInput.value !== "") {
+      localStorage.username = emailInput.value;
+      localStorage.checkbox = rmCheck.value;
+    } else {
+      localStorage.username = "";
+      localStorage.checkbox = "";
+    }
+  }
+</script>
+
+{% schema %}
+{
+"name": "Contact",
+"settings": [
+{
+"type": "color_scheme",
+"id": "color_scheme",
+"label": "Color Scheme",
+"default": "scheme-1"
+},
+{
+"type": "range",
+"id": "padding_top",
+"min": 0,
+"max": 100,
+"step": 4,
+"unit": "px",
+"label": "Padding Top",
+"default": 36
+},
+{
+"type": "range",
+"id": "padding_bottom",
+"min": 0,
+"max": 100,
+"step": 4,
+"unit": "px",
+"label": "Padding Bottom",
+"default": 36
+},
+{
+"type": "textarea",
+"id":"svg_icon",
+"label": "SVG Icon"
+},
+{
+"type": "text",
+"id": "heading",
+"label": "Collection",
+"default": "Heading"
+}, {
+"type": "text",
+"id": "content-inner",
+"label": "Collection",
+"default": "Content"
+}
+]
+}
+{% endschema %}

@@ -1,0 +1,351 @@
+{% style %}
+.main_img_with_text_block {
+padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+}
+
+@media (max-width: 767px) {
+.main_img_with_text_block {
+padding-top: {{ section.settings.padding_top }}px;
+padding-bottom: {{ section.settings.padding_bottom }}px;
+}
+}
+
+.image_with_text_inner.img-inner-{{ section.id }} {
+display: flex;
+width: 100%;
+{% if section.settings.image_position == 'left' %}
+  flex-direction: row;
+{% endif %}
+{% if section.settings.image_position == 'right' %}
+  flex-direction: row-reverse;
+{% endif %}
+justify-content: center;
+align-items: center;
+flex-wrap: wrap;
+}
+
+.image_block {
+width: 50%;
+display: block;
+box-sizing: border-box;
+padding: 0 7.5px;
+}
+
+{% endstyle %}
+
+<div
+  class="main_img_with_text_block color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding">
+  <section class="main-content" id="img_with_txt">
+    <div class="image_with_text_inner img-inner-{{ section.id }}">
+      <div class="image_block">
+        {% if section.settings.img == blank %}
+        {{ 'collection-1' | placeholder_svg_tag }}
+        {% else %}
+        <img src="{{ section.settings.img | img_url: 'master' }}" alt="Image">
+        {% endif %}
+      </div>
+      <div class="text_block">
+        {% if section.settings.heading %}
+        <div class="txt_heading">
+          <h2>{{ section.settings.heading }}</h2>
+        </div>
+        {% endif %}
+        {% if section.settings.content %}
+        <div class="txt_content">
+          {{ section.settings.content }}
+        </div>
+        {% endif %}
+        <div class="svg_icon_main_section">
+          {% for block in section.blocks %}
+          <div class="svg_icon_inner_item">
+
+            <div class="svg_icon_text_section">
+              {% if block.settings.svg_icon != blank %}
+              <div class="text_svg_icon">
+                {{ block.settings.svg_icon }}
+              </div>
+              {% else %}
+              <div class="text_svg_icon">
+                {% render 'icon-accordion'
+                , icon: block.settings.icon %}
+              </div>
+              {% endif %}
+              <div class="svg_content">
+                <p>{{ block.settings.svg_content }}</p>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+        {% if section.settings.btn_text != blank %}
+        <button class="btn_inner_content">
+          <a class="custom_btn" href="{{ section.settings.btn_url }}">{{ section.settings.btn_text }}</a>
+        </button>
+        {% endif %}
+      </div>
+    </div>
+</div>
+</section>
+</div>
+
+{% schema %}
+{
+"name": "Image With Text",
+"settings": [
+{
+"type": "color_scheme",
+"id": "color_scheme",
+"label": "Color Scheme",
+"default": "scheme-1"
+},
+{
+"type": "range",
+"id": "padding_top",
+"min": 0,
+"max": 100,
+"step": 4,
+"unit": "px",
+"label": "Padding Top",
+"default": 36
+},
+{
+"type": "range",
+"id": "padding_bottom",
+"min": 0,
+"max": 100,
+"step": 4,
+"unit": "px",
+"label": "Padding Bottom",
+"default": 36
+},
+{
+"type": "image_picker",
+"id": "img",
+"label": "Add Your Image Here"
+},
+{
+  "type": "select",
+  "id": "image_position",
+  "label": "Image Position",
+  "options": [
+    {
+      "value": "left",
+      "label": "Left"
+    },
+    {
+      "value": "right",
+      "label": "Right"
+    }
+  ],
+  "default": "left"
+},
+{
+"type": "text",
+"id": "heading",
+"label": "Text Heading",
+"default": "Head"
+},
+{
+"type": "richtext",
+"id": "content",
+"label": "Text Content",
+"default": "<p>Text Content</p>"
+}, {
+"type": "url",
+"id": "btn_url",
+"label": "Button Url"
+}, {
+"type": "text",
+"id": "btn_text",
+"label": "Button Text",
+"default": "Button"
+}
+],
+"blocks": [
+{
+"type": "text",
+"name": "Text Contents",
+"limit": 6,
+"settings": [
+{
+"type": "select",
+"id": "icon",
+"options": [
+{
+"value": "none",
+"label": "None"
+},
+{
+"value": "apple",
+"label": "Apple"
+},
+{
+"value": "banana",
+"label": "Banana"
+},
+{
+"value": "bottle",
+"label": "Bottle"
+}, {
+"value": "box",
+"label": "Box"
+}, {
+"value": "carrot",
+"label": "Carrot"
+}, {
+"value": "chat_bubble",
+"label": "Chat Bubble"
+}, {
+"value": "check_mark",
+"label": "Check Mark"
+}, {
+"value": "clipboard",
+"label": "Clipboard"
+}, {
+"value": "dairy",
+"label": "Dairy"
+}, {
+"value": "dairy_free",
+"label": "Dairy Free"
+}, {
+"value": "dryer",
+"label": "Dryer"
+}, {
+"value": "eye",
+"label": "Eye"
+}, {
+"value": "fire",
+"label": "Fire"
+}, {
+"value": "gluten_free",
+"label": "Gluten Free"
+}, {
+"value": "heart",
+"label": "Heart"
+}, {
+"value": "iron",
+"label": "Iron"
+}, {
+"value": "leaf",
+"label": "Leaf"
+}, {
+"value": "leather",
+"label": "Leather"
+}, {
+"value": "lightning_bolt",
+"label": "Lighting Bolt"
+}, {
+"value": "lipstick",
+"label": "Lipstick"
+}, {
+"value": "lock",
+"label": "Lock"
+}, {
+"value": "map_pin",
+"label": "Map Pin"
+}, {
+"value": "nut_free",
+"label": "Nut Free"
+}, {
+"value": "pants",
+"label": "Pants"
+}, {
+"value": "paw_print",
+"label": "Paw Print"
+}, {
+"value": "pepper",
+"label": "Pepper"
+}, {
+"value": "perfume",
+"label": "Perfume"
+}, {
+"value": "plane",
+"label": "Plane"
+}, {
+"value": "plant",
+"label": "Plant"
+}, {
+"value": "price_tag",
+"label": "Price Tag"
+}, {
+"value": "question_mark",
+"label": "Question Mark"
+}, {
+"value": "recycle",
+"label": "Recycle"
+}, {
+"value": "return",
+"label": "Return"
+}, {
+"value": "ruler",
+"label": "Ruler"
+}, {
+"value": "serving_dish",
+"label": "Serving Dish"
+}, {
+"value": "shirt",
+"label": "Shirt"
+}, {
+"value": "shoe",
+"label": "Shoe"
+}, {
+"value": "silhouette",
+"label": "Silhourtte"
+}, {
+"value": "snowflake",
+"label": "Snowflake"
+}, {
+"value": "star",
+"label": "Star"
+}, {
+"value": "stopwatch",
+"label": "Stopwatch"
+}, {
+"value": "truck",
+"label": "Truck"
+}, {
+"value": "washing",
+"label": "Washing"
+}, {
+"value": "ring",
+"label": "Ring"
+}
+],
+"default": "check_mark",
+"label": "Check Mark"
+},
+{
+"type": "textarea",
+"id": "svg_icon",
+"label": "SVG Icon"
+}, {
+"type": "text",
+"id": "svg_content",
+"label": "SVG Content",
+"default": "Svg Content"
+}
+]
+}
+],
+"presets": [
+{
+"name": "Image With Text",
+"blocks": [
+{
+"type": "text"
+},
+{
+"type": "text"
+},
+{
+"type": "text"
+},
+{
+"type": "text"
+}
+]
+}
+]
+}
+{% endschema %}

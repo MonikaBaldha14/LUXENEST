@@ -1,0 +1,55 @@
+<div class="featured_collection_img color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding">
+  {% if collection.image != blank %}
+    <section class="main-content collection_banner">
+      <a href="{{ collection.url }}">
+        <div class="collection-hero">
+          <div class="collection-hero__text-wrapper">
+            <h1 class="collection-hero__title">
+              {{- collection.title | escape -}}
+            </h1>
+            {%- if section.settings.show_collection_description -%}
+              <div class="collection-hero__description">{{ collection.description }}</div>
+            {%- endif -%}
+          </div>
+          {%- if section.settings.show_collection_image -%}
+            <div class="collection-hero__image-container ">
+              <img
+                class="collection_hero_img"
+                src="{{ collection.image | image_url: width: 750 }}"
+                alt="Collection Image">
+            </div>
+        {% endif %}
+        </div>
+      </a>
+    </section>
+  {%- endif -%}
+</div>
+
+{% schema %}
+  {
+    "name": "Custom Collection Banner",
+    "class": "section",
+    "settings": [
+      {
+          "type": "color_scheme",
+          "id": "color_scheme",
+          "label": "Color Scheme",
+          "default": "scheme-1"
+      },
+      {
+        "type": "paragraph",
+        "content": "Content"
+      }, {
+        "type": "checkbox",
+        "id": "show_collection_description",
+        "default": true,
+        "label": "Collection Description"
+      }, {
+        "type": "checkbox",
+        "id": "show_collection_image",
+        "default": false,
+        "label": "Collection Image"
+      }
+    ]
+  }
+{% endschema %}

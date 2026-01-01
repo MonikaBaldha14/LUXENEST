@@ -1,0 +1,337 @@
+<style>
+  .before_after_wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 15px;
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media (max-width: 767px) {
+    .before_after_wrapper {
+      flex-direction: column;
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+
+    .image-block,
+    .content-block {
+      width: 100% !important;
+    }
+  }
+
+  .image-block,
+  .content-block {
+    width: 49%;
+  }
+
+  .image-block.w-100,
+  .content-block.w-100 {
+    width: 100%;
+  }
+
+  .image-block.w-50,
+  .content-block.w-50 {
+    width: 49%;
+  }
+
+  .before_after_item {
+    position: relative;
+    background-color: rgb(var(--color-background));
+  }
+
+  .befor_afetr_section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+  }
+
+  .before-after {
+    position: relative;
+    width: 100%;
+    min-height: 100%;
+  }
+
+  .before-after .img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top;
+  }
+
+  .before-after .img.front-img {
+    z-index: 2;
+  }
+
+  .before-after .img.back-img {
+    z-index: 1;
+  }
+
+  .slider {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    appearance: none;
+    background: transparent;
+    z-index: 3;
+    cursor: grab;
+    margin: 0;
+  }
+
+  .slider::-webkit-slider-thumb,
+  .slider::-moz-range-thumb {
+    width: 5px;
+    min-height: 100%;
+    background-color: rgb(var(--color-background));
+    border: none;
+    border-radius: 0;
+    cursor: grabbing;
+  }
+
+  .before_after_section {
+    position: absolute;
+    z-index: 4;
+    text-align: center;
+  }
+
+  .before_after_section.before_title {
+    bottom: 5px;
+    right: 5px;
+  }
+
+  .before_after_section.after_title {
+    bottom: 5px;
+    left: 5px;
+  }
+
+  .before_after_section h4 {
+    font-size: 18px;
+    color: rgba(var(--color-foreground));
+  }
+
+  .product_inner_section {
+    width: 100%;
+  }
+
+  .custom-content-block {
+    text-align: center;
+    padding: 20px;
+  }
+
+  .custom-heading {
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+
+  .custom-description {
+    font-size: 16px;
+    margin-bottom: 15px;
+  }
+
+  .custom-button {
+    background-color: #000;
+    color: #fff;
+    padding: 10px 20px;
+    display: inline-block;
+    text-decoration: none;
+    border-radius: 4px;
+  }
+</style>
+
+
+
+<section class="main-content">
+  <div class="before_after_wrapper color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding">
+  
+    {% if section.settings.block_type != 'content' %}
+    <!-- Image Section -->
+    <div class="image-block {% if section.settings.block_type == 'image' %}w-100{% endif %} {% if section.settings.block_type == 'both' %}w-50{% endif %}">
+      <div class="before-after">
+        {% if section.settings.before_img != blank %}
+          <img class="img back-img" src="{{ section.settings.before_img | img_url: 'master' }}" alt="before" />
+        {% else %}
+          <img class="img back-img" src="https://cdn.shopify.com/s/files/1/0533/2089/files/placeholder-images-collection-4_large.png?v=1530129177" alt="before" />
+        {% endif %}
+
+        {% if section.settings.after_img != blank %}
+          <img class="img front-img" src="{{ section.settings.after_img | img_url: 'master' }}" alt="after" />
+        {% else %}
+          <img class="img front-img" src="https://cdn.shopify.com/s/files/1/0533/2089/files/placeholder-images-collection-3_large.png?v=1530129113" alt="after" />
+        {% endif %}
+
+        {% if section.settings.before %}
+          <div class="before_after_section before_title">
+            <h4>{{ section.settings.before }}</h4>
+          </div>
+        {% endif %}
+        {% if section.settings.after %}
+          <div class="before_after_section after_title">
+            <h4>{{ section.settings.after }}</h4>
+          </div>
+        {% endif %}
+
+        <input type="range" min="0" max="100" value="{{ section.settings.img_range }}" class="slider" id="slider-{{ section.id }}" />
+      </div>
+    </div>
+    {% endif %}
+
+    {% if section.settings.block_type != 'image' %}
+    <!-- Content & Product Section -->
+    <div class="content-block {% if section.settings.block_type == 'content' %}w-100{% endif %} {% if section.settings.block_type == 'both' %}w-50{% endif %}">
+      {% if section.settings.product != blank %}
+        {% assign product = all_products[section.settings.product] %}
+        <div class="featured_product">
+          {% render 'card-product', product: product, collection: collection %}
+        </div>
+      {% else %}
+        <div class="custom-content-block">
+          <h2 class="custom-heading">{{ section.settings.custom_heading }}</h2>
+          <div class="custom-description">{{ section.settings.custom_subtext }}</div>
+          <a href="{{ section.settings.custom_button_link }}" class="custom-button">
+            {{ section.settings.custom_button_text }}
+          </a>
+        </div>
+      {% endif %}
+    </div>
+    {% endif %}
+    
+  </div>
+</section>
+
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const slider = document.getElementById("slider-{{ section.id }}");
+    const frontImage = slider.closest(".image-block").querySelector(".front-img");
+
+    // Set initial clip-path on page load
+    function updateClipPath(value) {
+      frontImage.style.clipPath = `polygon(0 0, ${value}% 0, ${value}% 100%, 0% 100%)`;
+    }
+
+    updateClipPath(slider.value); // Apply initial value on load
+
+    // Update clip-path on slider input
+    slider.addEventListener("input", function () {
+      updateClipPath(this.value);
+    });
+  });
+</script>
+
+
+{% schema %}
+{
+  "name": "Before/After & Content",
+  "settings": [
+    {
+      "type": "select",
+      "id": "block_type",
+      "label": "Block Type to Show",
+      "options": [
+        { "value": "both", "label": "Both" },
+        { "value": "image", "label": "Only Image Block" },
+        { "value": "content", "label": "Only Content/Product Block" }
+      ],
+      "default": "both"
+    },
+    {
+      "type": "image_picker",
+      "id": "before_img",
+      "label": "Before Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "after_img",
+      "label": "After Image"
+    },
+    {
+      "type": "range",
+      "id": "img_range",
+      "label": "Image Reveal Percentage",
+      "min": 0,
+      "max": 100,
+      "default": 50,
+      "step": 1
+    },
+    {
+      "type": "text",
+      "id": "before",
+      "label": "Before Label"
+    },
+    {
+      "type": "text",
+      "id": "after",
+      "label": "After Label"
+    },
+    {
+      "type": "product",
+      "id": "product",
+      "label": "Select Product"
+    },
+    {
+      "type": "text",
+      "id": "custom_heading",
+      "label": "Custom Heading",
+      "default": "Transform Your Space"
+    },
+    {
+      "type": "richtext",
+      "id": "custom_subtext",
+      "label": "Custom Subtext"
+    },
+    {
+      "type": "url",
+      "id": "custom_button_link",
+      "label": "Button Link"
+    },
+    {
+      "type": "text",
+      "id": "custom_button_text",
+      "label": "Button Text",
+      "default": "Shop Now"
+    },
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "label": "Color Scheme",
+      "options": [
+        { "value": "background-1", "label": "Default" },
+        { "value": "background-2", "label": "Secondary" }
+      ],
+      "default": "background-1"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top Padding",
+      "min": 0,
+      "max": 100,
+      "default": 40,
+      "step": 4
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom Padding",
+      "min": 0,
+      "max": 100,
+      "default": 40,
+      "step": 4
+    }
+  ],
+  "presets": [
+    {
+      "name": "Before/After Image with Content Block",
+      "category": "Custom"
+    }
+  ]
+}
+
+{% endschema %}

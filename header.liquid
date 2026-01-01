@@ -1,0 +1,522 @@
+<style>
+  .main_header_section {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media (max-width: 767px) {
+    .main_header_section {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+
+  .header-inner-section.header-block.header-second-block a img{
+    width: {{ settings.logo_width }}px;
+  }
+</style>
+
+<header>
+  <div class="main_header_section color-{{ section.settings.color_scheme }} gradient {% if section.settings.sticky_header != blank %}{% if template == 'index' %}sticky_header{% endif %}{% endif %}" {% if section.settings.sticky_header !="blank" %}
+    data-nav-status="toggle"
+  {% endif %} >
+    <section class="main-content">
+      <div class="custon-header">
+        <div class="main-header-row">
+          <div class="main-header-content">
+            <div class="header-lower-nav">
+              <div class="header-main-inner-section">
+                        <div class="header-block menu-toggle">
+                            <span class="responsive_header">
+                                <svg class="icon icon-hamburger active" width="20" height="20" viewBox="0 0 20 20" aria-hidden="true" focusable="false" role="presentation" class="icon icon-hamburger" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M3.125 10H16.875" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                <path d="M3.125 5H16.875" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                <path d="M3.125 15H16.875" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                </svg>
+                                <svg class="close_header" width="20" height="20" viewBox="0 0 20 20" aria-hidden="true" focusable="false" role="presentation" class="icon icon-close" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M15.8333 4.16675L4.16667 15.8334M15.8333 15.8334L4.16667 4.16675" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
+                                </svg>
+                            </span>
+                          </div>
+                          <div class="header-inner-section header-block header-second-block">
+                              <a href="/">
+                              {% if settings.logo != blank %}
+                                <img
+                                  class="img-logo"
+                                  src="{{ settings.logo |  img_url: '500x250'  }}"
+                                  alt="img-logo">
+                                  {% else %}
+                                  <h1 class="logo_txt">{{ shop.name }}</h1>
+                              {% endif %}
+                              </a>
+                          </div>
+                    <ul class="header-inner-section header-block header-last-block">
+                    
+                    <li class="user">
+                        {% if customer.has_account %}
+                        <a href="{{ routes.account_url }}" class="user">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" role="presentation" class="icon icon-account">
+                            <path d="M1.59961 13.675C1.59961 11.158 3.70247 9.11756 7.99961 9.11756C12.2968 9.11756 14.3996 11.158 14.3996 13.675C14.3996 14.0755 14.1075 14.4001 13.7471 14.4001H2.25216C1.89177 14.4001 1.59961 14.0755 1.59961 13.675Z" stroke="currentColor" stroke-width="1.3"></path>
+                            <path d="M10.3996 4.0001C10.3996 5.32558 9.32509 6.4001 7.99961 6.4001C6.67413 6.4001 5.59961 5.32558 5.59961 4.0001C5.59961 2.67461 6.67413 1.6001 7.99961 1.6001C9.32509 1.6001 10.3996 2.67461 10.3996 4.0001Z" stroke="currentColor" stroke-width="1.3"></path>
+                        </svg>
+                        </a>
+                        {% else %}
+                        <a href="{{ routes.account_login_url }}" class="user">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" role="presentation" class="icon icon-account">
+                            <path d="M1.59961 13.675C1.59961 11.158 3.70247 9.11756 7.99961 9.11756C12.2968 9.11756 14.3996 11.158 14.3996 13.675C14.3996 14.0755 14.1075 14.4001 13.7471 14.4001H2.25216C1.89177 14.4001 1.59961 14.0755 1.59961 13.675Z" stroke="currentColor" stroke-width="1.3"></path>
+                            <path d="M10.3996 4.0001C10.3996 5.32558 9.32509 6.4001 7.99961 6.4001C6.67413 6.4001 5.59961 5.32558 5.59961 4.0001C5.59961 2.67461 6.67413 1.6001 7.99961 1.6001C9.32509 1.6001 10.3996 2.67461 10.3996 4.0001Z" stroke="currentColor" stroke-width="1.3"></path>
+                            </svg>
+                            </a>
+                        {% endif %}
+                    </li>
+                    <li class="search">
+                        <a class="search-logo">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" focusable="false" aria-hidden="true" role="presentation" class="icon icon-search">
+                        <path d="M14.1057 14.2L17 17M16.0667 9.53333C16.0667 13.1416 13.1416 16.0667 9.53333 16.0667C5.92507 16.0667 3 13.1416 3 9.53333C3 5.92507 5.92507 3 9.53333 3C13.1416 3 16.0667 5.92507 16.0667 9.53333Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
+                        </svg>
+                        </a>
+                    </li>
+                    <li class="cart">
+                        <a href="#" class="open_cart">
+                        <div class="add-to-cart-icon">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" class="icon icon-cart" aria-hidden="true" focusable="false" role="presentation">
+                            <path d="M4.5 8.01995L8.52569 3.62829C9.31836 2.76355 10.6816 2.76355 11.4743 3.62829L15.5 8.01995M17.5975 9.31685L15.4243 16.3168C15.2944 16.7352 14.9073 17.0204 14.4693 17.0204H5.58499C5.14911 17.0204 4.76345 16.738 4.63173 16.3225L2.41278 9.32253C2.2084 8.67779 2.68968 8.02035 3.36603 8.02035H16.6425C17.3163 8.02035 17.7973 8.67329 17.5975 9.31685Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                            </svg>
+                            <span class="product-count">{{ cart.item_count }}</span>
+                        </div>
+                        </a>
+                    </li>
+                    </ul>
+                </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <div class="nav_main_section">
+      {%  render 'mega-menu' %}
+    </div>
+    {% if section.settings.main_title != blank %}
+      <div class="colelction_drop_main">
+      {% render 'custom-collection-nav' %}
+    </div>
+    {% endif %}
+  </div>
+</header>
+
+  <script>
+  $(document).ready(function () {
+    var previousScroll = 0;
+
+    $(window).on("scroll", function () {
+      var currentScroll = $(this).scrollTop();
+      var nav = $("[data-nav-status='toggle']");
+
+      // Scrolling down
+      if (currentScroll > previousScroll && currentScroll > 50) {
+        nav.removeClass("is-visible").addClass("is-hidden");
+      } 
+      // Scrolling up
+      else {
+        nav.removeClass("is-hidden is-visible"); // Clear all
+        if (currentScroll > 50) {
+          nav.addClass("is-visible");
+        }
+      }
+
+      previousScroll = currentScroll;
+    });
+  });
+</script>
+
+
+{% schema %}
+{
+  "name": "Header with Colle Group",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color Scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 36
+    },
+    {
+      "type": "checkbox",
+      "id": "sticky_header",
+      "label": "Transparent Header"
+    },
+    {
+      "type": "text",
+      "id": "text",
+      "label": "TEXT",
+      "default": "TEXT"
+    },
+    {
+      "type": "text",
+      "id": "register_title",
+      "label": "Register Title",
+      "default": "No Yet Account?"
+    },
+    {
+      "type": "checkbox",
+      "id": "country",
+      "label": "Country Label"
+    },
+    {
+      "type": "checkbox",
+      "id": "country_title",
+      "label": "Country Title"
+    },
+    {
+      "type": "checkbox",
+      "id": "language",
+      "label": "Language Label"
+    },
+    {
+      "type": "checkbox",
+      "id": "language_title",
+      "label": "Language Title"
+    },
+    {
+      "type": "link_list",
+      "id": "header-link",
+      "label": "Desktop Header Menu",
+      "default": "main-menu"
+    },
+    {
+      "type": "link_list",
+      "id": "header-link-responsive",
+      "label": "Responsive Header Menu",
+      "default": "main-menu"
+    },
+    {
+      "type": "checkbox",
+      "id": "coll_img",
+      "label": "Show Collection With Image"
+    },
+    {
+      "type": "checkbox",
+      "id": "product_img",
+      "label": "Show Product With Image"
+    },
+    {
+      "type": "checkbox",
+      "id": "second_image",
+      "label": "Second Image",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "main_title",
+      "label": "Main Title",
+      "default": "Main Title"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Select Background"
+    },
+    {
+      "type": "color",
+      "id": "txt_color",
+      "label": "Select Text Color"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "header",
+      "name": "Mega Menu",
+      "limit": 5,
+      "settings": [
+        {
+          "type": "text",
+          "id": "menu_title",
+          "label": "Menu Title"
+        },
+        {
+          "type": "checkbox",
+          "id": "megamenu_option",
+          "label": "Enable to Megamenu Option"
+        },
+        {
+          "type": "select",
+          "id": "megamenu",
+          "label": "MegaMenu Option",
+          "options": [
+            {
+              "label": "Megamenu Image",
+              "value": "megamenu_img"
+            },
+            {
+              "label": "Megamenu Collection",
+              "value": "megamenu_collection"
+            },
+            {
+              "label": "Megamenu Product",
+              "value": "megamenu_product"
+            }
+          ]
+        },
+        {
+          "type": "image_picker",
+          "id": "menu_img_one",
+          "label": "Product Image 1"
+        },
+        {
+          "type": "url",
+          "id": "link_one",
+          "label": "Image Link 1"
+        },
+        {
+          "type": "image_picker",
+          "id": "menu_img_two",
+          "label": "Product Image 2"
+        },
+        {
+          "type": "url",
+          "id": "link_two",
+          "label": "Image Link 2"
+        },
+        {
+          "type": "image_picker",
+          "id": "menu_img_three",
+          "label": "Product Image 3"
+        },
+        {
+          "type": "url",
+          "id": "link_three",
+          "label": "Image Link 3"
+        },
+        {
+          "type": "image_picker",
+          "id": "menu_img_four",
+          "label": "Product Image 4"
+        },
+        {
+          "type": "url",
+          "id": "link_four",
+          "label": "Image Link 4"
+        },
+        {
+          "type": "collection",
+          "id": "collection_one",
+          "label": "First Collection"
+        },
+        {
+          "type": "collection",
+          "id": "collection_two",
+          "label": "Second Collection"
+        },
+        {
+          "type": "collection",
+          "id": "collection_three",
+          "label": "Third Collection"
+        },
+        {
+          "type": "collection",
+          "id": "collection_four",
+          "label": "Forth Collection"
+        }
+      ]
+    },
+    {
+      "type": "collection_group",
+      "name": "Collection Group",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Dropdown Label"
+        },
+        {
+          "type": "header",
+          "content": "Collection 1"
+        },
+        {
+          "type": "collection",
+          "id": "collection_2",
+          "label": "Collection 2"
+        },
+        {
+          "type": "collection",
+          "id": "collection_3",
+          "label": "Collection 3"
+        },
+        {
+          "type": "collection",
+          "id": "collection_4",
+          "label": "Collection 4"
+        },
+        {
+          "type": "collection",
+          "id": "collection_5",
+          "label": "Collection 5"
+        },
+        {
+          "type": "collection",
+          "id": "collection_6",
+          "label": "Collection 6"
+        },
+        {
+          "type": "collection",
+          "id": "collection_7",
+          "label": "Collection 7"
+        },
+        {
+          "type": "collection",
+          "id": "collection_8",
+          "label": "Collection 8"
+        },
+        {
+          "type": "collection",
+          "id": "collection_9",
+          "label": "Collection 9"
+        },
+        {
+          "type": "collection",
+          "id": "collection_10",
+          "label": "Collection 10"
+        },
+        {
+          "type": "collection",
+          "id": "collection_11",
+          "label": "Collection 11"
+        },
+        {
+          "type": "collection",
+          "id": "collection_12",
+          "label": "Collection 12"
+        },
+        {
+          "type": "collection",
+          "id": "collection_13",
+          "label": "Collection 13"
+        },
+        {
+          "type": "collection",
+          "id": "collection_14",
+          "label": "Collection 14"
+        },
+        {
+          "type": "collection",
+          "id": "collection_15",
+          "label": "Collection 15"
+        }
+      ]
+    },
+    {
+      "type": "product_group",
+      "name": "Product Group",
+      "limit": 5,
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Dropdown Label"
+        },
+        {
+          "type": "product",
+          "id": "product_1",
+          "label": "Product 1"
+        },
+        {
+          "type": "product",
+          "id": "product_2",
+          "label": "Product 2"
+        },
+        {
+          "type": "product",
+          "id": "product_3",
+          "label": "Product 3"
+        },
+        {
+          "type": "product",
+          "id": "product_4",
+          "label": "Product 4"
+        },
+        {
+          "type": "product",
+          "id": "product_5",
+          "label": "Product 5"
+        },
+        {
+          "type": "product",
+          "id": "product_6",
+          "label": "Product 6"
+        },
+        {
+          "type": "product",
+          "id": "product_7",
+          "label": "Product 7"
+        },
+        {
+          "type": "product",
+          "id": "product_8",
+          "label": "Product 8"
+        },
+        {
+          "type": "product",
+          "id": "product_9",
+          "label": "Product 9"
+        },
+        {
+          "type": "product",
+          "id": "product_10",
+          "label": "Product 10"
+        },
+        {
+          "type": "product",
+          "id": "product_11",
+          "label": "Product 11"
+        },
+        {
+          "type": "product",
+          "id": "product_12",
+          "label": "Product 12"
+        },
+        {
+          "type": "product",
+          "id": "product_13",
+          "label": "Product 13"
+        },
+        {
+          "type": "product",
+          "id": "product_14",
+          "label": "Product 14"
+        },
+        {
+          "type": "product",
+          "id": "product_15",
+          "label": "Product 15"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Header with Colle Group"
+    }
+  ]
+}
+{% endschema %}
+
+

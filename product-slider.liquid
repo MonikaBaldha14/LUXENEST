@@ -1,0 +1,233 @@
+<style>
+  .main_product_block {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media (max-width: 767px) {
+    .main_product_block {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+    
+  }
+
+  .content_product_block {
+    padding-top: {{ section.settings.padding_inner_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_inner_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media (max-width: 767px) {
+    .content_product_block {
+      padding-top: {{ section.settings.padding_inner_top }}px;
+      padding-bottom: {{ section.settings.padding_inner_bottom }}px;
+    }
+}
+
+</style>
+
+<div class="main_product_block color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding">
+  <div class="bg_img_block" style="background-image: 
+      {% if section.settings.bg_img == blank %}
+      url('https://cdn.shopify.com/s/files/1/0533/2089/files/placeholder-images-lifestyle-1_large.png')
+      {% else %}
+      url('{{ section.settings.bg_img | img_url: 'master' }}')
+      {% endif %};">
+    <div class="content_product_block section-{{ section.id }}-padding">
+      <section class="main-content">
+        <div class="flex-section">
+          <div class="collection_carousel_wrapper__list">
+            <div class="collection_carousel_icon">
+              {{ section.settings.svg_icon }}
+            </div>
+            <div class="collection_carousel_content">
+              <h2 class="collection_carousel_heading">{{ section.settings.coll_head }}</h2>
+            </div>
+            <div class="collection_carousel_text">
+              <p>{{ section.settings.coll_content }}</p>
+            </div>
+            {% if section.settings.btn_link != blank %}
+              <button class="btn_inner_content">
+                <a class="custom_btn" href="{{ section.settings.btn_link }}">{{ section.settings.btn_text }}</a>
+              </button>
+            {% endif %}
+          </div>
+          <div class="product_block">
+            <div class="product_inner_block">
+              {% if section.settings.collection != blank %}
+                <div class="product_slider_main_block">
+                  {%- assign collection = section.settings.collection -%}
+                  {% for product in collections[collection].products %}
+                    <div class="product_slider_inner">
+                      {% render 'card-product'
+                        , product: product
+                        , collection: collection %}
+                    </div>
+                  {% endfor %}
+                </div>
+              {% else %}
+                <div class="featured-product-row">
+                  <div class="featured-product-url">
+                    <div class="featured-product-img">
+                      {{ 'product-1' | placeholder_svg_tag }}
+                    </div>
+                    <div class="main-product-content">
+                      <div class="featured-product-title">
+                        <h3 class="title">Example of Product</h3>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="featured-product-url">
+                    <div class="featured-product-img">
+                      {{ 'product-2' | placeholder_svg_tag }}
+                    </div>
+                    <div class="main-product-content">
+                      <div class="featured-product-title">
+                        <h3 class="title">Example of Product</h3>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="featured-product-url">
+                    <div class="featured-product-img">
+                      {{ 'product-3' | placeholder_svg_tag }}
+                    </div>
+                    <div class="main-product-content">
+                      <div class="featured-product-title">
+                        <h3 class="title">Example of Product</h3>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="featured-product-url">
+                    <div class="featured-product-img">
+                      {{ 'product-4' | placeholder_svg_tag }}
+                    </div>
+                    <div class="main-product-content">
+                      <div class="featured-product-title">
+                        <h3 class="title">Example of Product</h3>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </section>
+      <div class="image_overlay" style="background-color: {{ section.settings.img_gradient_color }}; opacity: {{ section.settings.image_gradient_darkness }}%"></div>
+    </div>
+  </div>
+</div>
+
+
+{% schema %}
+  {
+    "name": "Collection carousel Block",
+    "settings": [
+      {
+        "type": "color_scheme",
+        "id": "color_scheme",
+        "label": "Color Scheme",
+        "default": "scheme-1"
+      },
+      {
+        "type": "range",
+        "id": "padding_top",
+        "min": 0,
+        "max": 100,
+        "step": 4,
+        "unit": "px",
+        "label": "Padding Top",
+        "default": 36
+      },
+      {
+        "type": "range",
+        "id": "padding_bottom",
+        "min": 0,
+        "max": 100,
+        "step": 4,
+        "unit": "px",
+        "label": "Padding Bottom",
+        "default": 36
+      },
+      {
+        "type": "range",
+        "id": "padding_inner_top",
+        "min": 0,
+        "max": 100,
+        "step": 4,
+        "unit": "px",
+        "label": "Padding Top",
+        "default": 36
+      },
+      {
+        "type": "range",
+        "id": "padding_inner_bottom",
+        "min": 0,
+        "max": 100,
+        "step": 4,
+        "unit": "px",
+        "label": "Padding Bottom",
+        "default": 36
+      },
+      {
+        "type": "image_picker",
+        "id": "bg_img",
+        "label": "Background Image"
+      }, {
+        "type": "color",
+        "id": "img_gradient_color",
+        "label": "Image Gradient Color",
+        "default": "rgb(0, 0, 0)"
+      }, {
+        "type": "range",
+        "id": "image_gradient_darkness",
+        "min": 0,
+        "max": 100,
+        "step": 10,
+        "unit": "%",
+        "label": "Image Gradient Darkness",
+        "default": 20
+      }, 
+      {
+        "type": "checkbox",
+        "id": "compare_product",
+        "label": "Compare Prouct"
+      },{
+        "type": "textarea",
+        "id": "svg_icon",
+        "label": "SVG Icon"
+      }, {
+        "type": "text",
+        "id": "coll_head",
+        "label": "Collection Head",
+        "default": "Head"
+      }, {
+        "type": "text",
+        "id": "coll_content",
+        "label": "Collection Content",
+        "default": "Content"
+      }, {
+        "type": "url",
+        "id": "btn_link",
+        "label": "Add your Link Here"
+      }, {
+        "type": "text",
+        "id": "btn_text",
+        "label": "Button Text",
+        "default": "Button"
+      }, {
+        "type": "collection",
+        "id": "collection",
+        "label": "Add Collction"
+      }
+    ],
+    "presets": [
+      {
+        "name": "Collection carousel Block"
+      }
+    ]
+  }
+{% endschema %}

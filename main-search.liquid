@@ -1,0 +1,167 @@
+<style>
+  .search_result_page {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media (max-width: 767px) {
+    .search_result_page {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+</style>
+
+
+
+<div class="search_result_page color-{{ section.settings.color_scheme }} gradient">
+  <div class="container">
+    {% paginate search.results by 12 %}
+      <div class="result-product">
+        <section class="main-content">
+          <div class="result-serach-block">
+            <form
+              action="/search"
+              method="get"
+              role="search">
+              <input
+                type="text"
+                id="search-input"
+                name="q"
+                value="{{ search.terms | escape }}">
+              <i class="fa fa-search predictive-search-icon-result" aria-hidden="true"></i>
+            </form>
+          </div>
+
+          <div class="result-product-block">
+            {% if search.performed  %}
+              {% for item in search.results %}
+                <div class="trend__item">
+                  {% if item.object_type == 'product' %}
+                    <div class="featured_product search-product-inner">
+                      {% render 'card-product'
+                                  , product: item
+                                  , collection: collection
+                                  , slider: section.settings.slider_check %}
+                    </div>
+                  {% endif %}
+                  {% if item.object_type == 'page' %}
+                    
+                      <div class="product_listing_result">
+                        <div class="result_title"><h4>Pages</h4></div>
+                        <div class="inner-title-result">
+                          <a href="{{ item.url }}">
+                            <div class="product_page_icon_result">
+                                    <svg class= "icon_page_result" width="16" height="16" viewBox="0 0 32 33" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M12.8498 30.9H5.64979C3.66156 30.9 2.04979 29.2882 2.0498 27.3L2.04994 5.70008C2.04996 3.71186 3.66173 2.1001 5.64994 2.1001H21.8503C23.8386 2.1001 25.4503 3.71187 25.4503 5.7001V15.6001M18.2504 25.8001L21.5504 29.1001L29.9504 20.1001" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                    </svg>
+                                <div class="product_title_result">
+                                    <span>{{ item.title | truncate: 50 }}</span>
+                                </div>
+                            </div>
+                          </a>
+                        </div>
+                      </div>
+                  {% endif %}
+                  {% if item.object_type == 'article' %}
+                    <div class="product_listing_result">
+                      <div class="result_title"><h4>Articles</h4></div>
+                        <div class="inner-title-result">
+                          <a href="{{ item.url }}">
+                            <div class="product_page_icon_result">
+                                    <svg class= "icon_page_result" width="16" height="16" viewBox="0 0 32 33" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M12.8498 30.9H5.64979C3.66156 30.9 2.04979 29.2882 2.0498 27.3L2.04994 5.70008C2.04996 3.71186 3.66173 2.1001 5.64994 2.1001H21.8503C23.8386 2.1001 25.4503 3.71187 25.4503 5.7001V15.6001M18.2504 25.8001L21.5504 29.1001L29.9504 20.1001" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                    </svg>
+                                <div class="product_title_result">
+                                    <span>{{ item.title | truncate: 30 }}</span>
+                                </div>
+                            </div>
+                          </a>
+                        </div>
+                      </div>
+                  {% endif %}
+                </div>
+              {% else %}
+                <div class="search_not_found">
+                  <p class="no_result">Result Not Found.</p>
+                  <svg
+                    class="not_found"
+                    fill="#000000"
+                    height="20px"
+                    width="20px"
+                    version="1.1"
+                    id="Layer_1"
+                    xmlns="http://www.w3.org/2000/svg"
+                    xmlns:xlink="http://www.w3.org/1999/xlink"
+                    viewBox="0 0 512 512"
+                    xml:space="preserve">
+                    <g><g><g>
+                      <path d="M21.333,21.333h213.333v96c0,5.867,4.8,10.667,10.667,10.667h96v74.667h21.333v-85.333c0-2.88-1.173-5.547-3.093-7.573
+                            L252.907,3.093C250.88,1.173,248.213,0,245.333,0H10.667C4.8,0,0,4.8,0,10.667v448c0,5.867,4.8,10.667,10.667,10.667H224V448
+                            H21.333V21.333z M256,36.373l70.293,70.293H256V36.373z" />
+                      <path d="M510.827,496.533l-128-256c-3.627-7.253-15.467-7.253-19.093,0l-128,256c-2.667,5.227-0.533,11.627,4.8,14.293
+                            c1.493,0.747,3.093,1.173,4.8,1.173h256C507.2,512,512,507.2,512,501.333C512,499.733,511.573,498.027,510.827,496.533z
+                            M262.613,490.667l110.72-221.44l110.72,221.44H262.613z" />
+                      <path d="M362.667,350.08v69.44c0,5.333,3.84,10.133,9.067,10.88c6.613,0.96,12.267-4.16,12.267-10.56V350.4
+                            c0-5.333-3.84-10.133-9.067-10.88C368.32,338.56,362.667,343.68,362.667,350.08z" />
+                      <path d="M373.333,444.16c-5.867,0-10.667,4.8-10.667,10.667c0,5.867,4.8,10.667,10.667,10.667c5.867,0,10.667-4.8,10.667-10.667
+                            C384,448.96,379.2,444.16,373.333,444.16z" />
+                    </g>
+                  </g>
+                </g>
+              </svg>
+            </div>
+          {% endfor %}
+        {% endif %}
+        <div class="pagination">
+          {% if paginate.pages > 1 %}
+            {{ paginate | default_pagination }}{% endif %}
+        </div>
+      </div>
+    </section>
+  </div>
+{% endpaginate %}</div>
+</div>
+
+{% schema %}
+{
+  "name": "Search Result Page",
+  "settings": [
+      {
+        "type": "color_scheme",
+        "id": "color_scheme",
+        "label": "Color Scheme",
+        "default": "scheme-1"
+      },
+      {
+        "type": "range",
+        "id": "padding_top",
+        "min": 0,
+        "max": 100,
+        "step": 5,
+        "unit": "px",
+        "label": "Padding Top",
+        "default": 35
+      },
+      {
+        "type": "range",
+        "id": "padding_bottom",
+        "min": 0,
+        "max": 100,
+        "step": 5,
+        "unit": "px",
+        "label": "Padding Bottom",
+        "default": 35
+      }, {
+        "type": "checkbox",
+        "id": "second_img",
+        "label": "Enable to on hover Second Image"
+      },
+      {
+        "type": "checkbox",
+        "id": "compare_product",
+        "label": "Compare Prouct"
+      }
+    ]
+}
+{% endschema %}

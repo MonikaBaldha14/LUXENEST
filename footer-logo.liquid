@@ -1,0 +1,28 @@
+<div class="footer_logo_content">
+    {% if section.settings.footer-logo %}
+        <div class="footer_logo">
+            <img src="{{ section.settings.footer-logo |  img_url: 'master' }}" alt="Footer Logo">
+        </div>
+    {% endif %}
+    {% if section.settings.content %}
+        <p class="content">{{ section.settings.content }}</p>
+    {% endif %}
+</div>
+
+{% schema %}
+{
+    "name": "Footer Logo",
+    "settings": [
+        {
+            "type": "image_picker",
+            "id": "footer-logo",
+            "label": "Footer Logo"
+        },
+        {
+            "type": "richtext",
+            "id": "content",
+            "label": "Content"
+        }
+        ]
+}
+{% endschema %}

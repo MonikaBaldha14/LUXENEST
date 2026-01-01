@@ -1,0 +1,348 @@
+<style>
+  .footer-main-block {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media (max-width: 767px) {
+    .footer-main-block {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+</style>
+
+<footer class="footer-main-block">
+  <div class="footer_inner_section_main color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding">
+    <section class="main-content">
+      <div class="footer_inner_section">
+        <div class="img_content_block flex_width">
+          <div class="svg_logo_img">
+            {% if section.settings.footer-logo %}
+              <div class="footer-img">
+                <img src="{{ section.settings.footer-logo |  img_url: 'master' }}" alt="Footer Logo">
+              </div>
+              {% else %}
+              <h1 class="logo_txt">{{ shop.name }}</h1>
+            {% endif %}
+          </div>
+          <p class="Content">{{ section.settings.content }}</p>
+        </div>
+        {% comment %} Footer Middle Block  {% endcomment %}
+        {% for block in section.blocks %}
+          {% if block.settings.footer-link != blank %}
+            <div class="footer-blocks footer-links-main flex_width">
+              <div class="footer-links-inner-main">
+                <ul class="footer-links">
+                  {% for link in block.settings.footer-link.links %}
+                    <li class="footer-main-links">
+                      <a class="mynav-footer-item-list" href="{{ link.url }}">{{ link.title }}</a>
+                      <i class="down-arrow fa fa-angle-down" aria-hidden="true"></i>
+
+                      {% if link.links != blank %}
+                        <ul class="mynav-footer-child-list-toggle">
+                          {% for childlink in link.links %}
+                            <li class="child-footer-menu-toggle">
+                              <a class="child-footer-list-item-toggle" href="{{ childlink.url }}">{{ childlink.title }}</a>
+                            </li>
+                          {% endfor %}
+                        </ul>
+                      {% endif %}
+                    </li>
+                  {% endfor %}
+                </ul>
+              </div>
+            </div>
+          {% endif %}
+        {% endfor %}
+        {% comment %} Footer Subscribe Block  {% endcomment %}
+        <div class="footer-blocks main-subscribe-block flex_width">
+          <div class="footer-title">
+            <h2 class="footer-heading">{{ section.settings.footer-title }}</h2>
+            <p class="footer-content">{{ section.settings.footer-content }}</p>
+          </div>
+          <div class="footer-input">
+            <form
+              class="subscribe-form"
+              action="/contact"
+              method="post">
+              <input
+                class="subscribe"
+                type="email"
+                name="mail"
+                placeholder="your mail address"
+                required>
+              <button type="submit" class="join">Subscribe</button>
+            </form>
+            {%- if form.errors -%}
+              <small class="newsletter-form__message form__message" id="ContactFooter-error">
+                {%- render 'icon-error' -%}
+                {{- form.errors.translated_fields.email | capitalize }}
+                {{ form.errors.messages.email -}}
+              </small>
+            {%- endif -%}
+          </div>
+        </div>
+      </div>
+
+      {% comment %} Footer Last Block  {% endcomment %}
+
+      <div class="footer-last">
+        {% if section.settings.language != blank and section.settings.country != blank %}
+          <div class="footer_country_selector middle_part">
+            {% if section.settings.country != blank %}
+              <div class="localization_main_footer">
+                <localization-form class="small-hide medium-hide">
+                  {%- form 'localization'
+                    , id: 'AnnouncementCountryForm'
+                    , class: 'localization-form' -%}
+                    <div>
+                      <h2 class="visually-hidden footer" id="AnnouncementCountryLabel">{{ 'localization.country_label' | t }}</h2>
+                      {%- render 'country-localization'
+                        , localPosition: 'AnnouncementCountry' -%}
+                    </div>
+                  {%- endform -%}
+                </localization-form>
+              </div>
+            {% endif %}
+            {% if section.settings.language != blank %}
+              <div class="localization_main_footer">
+                <localization-form class="small-hide medium-hide">
+                  {%- form 'localization'
+                    , id: 'AnnouncementLanguageForm'
+                    , class: 'localization-footer-form' -%}
+                    <div>
+                      <h2 class="visually-hidden footer" id="AnnouncementLanguageLabel">{{ 'localization.language_label' | t }}</h2>
+                      {%- render 'language-localization'
+                        , localPosition: 'AnnouncementLanguage' -%}
+                    </div>
+                  {%- endform -%}
+                </localization-form>
+              </div>
+            {% endif %}
+          </div>
+        {% endif %}
+        <div class="footer__column__payment middle_part">
+          {%- if section.settings.payment_enable -%}
+            <div class="footer__payment">
+              <ul class="list list-payment" role="list">
+                {%- for type in shop.enabled_payment_types -%}
+                  <li class="list-payment__item">
+                    {{ type | payment_type_svg_tag: class: 'icon icon--full-color' }}
+                  </li>
+                {%- endfor -%}
+              </ul>
+            </div>
+          {%- endif -%}
+        </div>
+        {% if section.settings.social_media_footer != blank %}
+          <div class="social_links_footer middle_part">
+            <ul class="list-unstyled list-social{% if class %} {{ class}}{% endif %}" role="list">
+              {%- if settings.social_facebook_link != blank -%}
+                <li class="list-social__item">
+                  <a href="{{ settings.social_facebook_link }}" class="link list-social__link">
+                    {%- render 'icon-facebook' -%}
+                  </a>
+                </li>
+              {%- endif -%}
+              {%- if settings.social_instagram_link != blank -%}
+                <li class="list-social__item">
+                  <a href="{{ settings.social_instagram_link }}" class="link list-social__link">
+                    {%- render 'icon-instagram' -%}
+                  </a>
+                </li>
+              {%- endif -%}
+              {%- if settings.social_youtube_link != blank -%}
+                <li class="list-social__item">
+                  <a href="{{ settings.social_youtube_link }}" class="link list-social__link">
+                    {%- render 'icon-youtube' -%}
+                  </a>
+                </li>
+              {%- endif -%}
+              {%- if settings.social_tiktok_link != blank -%}
+                <li class="list-social__item">
+                  <a href="{{ settings.social_tiktok_link }}" class="link list-social__link">
+                    {%- render 'icon-tiktok' -%}
+                  </a>
+                </li>
+              {%- endif -%}
+              {%- if settings.social_twitter_link != blank -%}
+                <li class="list-social__item">
+                  <a href="{{ settings.social_twitter_link }}" class="link list-social__link">
+                    {%- render 'icon-twitter' -%}
+                  </a>
+                </li>
+              {%- endif -%}
+              {%- if settings.social_pinterest_link != blank -%}
+                <li class="list-social__item">
+                  <a href="{{ settings.social_pinterest_link }}" class="link list-social__link">
+                    {%- render 'icon-pinterest' -%}
+                  </a>
+                </li>
+              {%- endif -%}
+              {%- if settings.social_snapchat_link != blank -%}
+                <li class="list-social__item">
+                  <a href="{{ settings.social_snapchat_link }}" class="link list-social__link">
+                    {%- render 'icon-snapchat' -%}
+                  </a>
+                </li>
+              {%- endif -%}
+              {%- if settings.social_tumblr_link != blank -%}
+                <li class="list-social__item">
+                  <a href="{{ settings.social_tumblr_link }}" class="link list-social__link">
+                    {%- render 'icon-tumblr' -%}
+                  </a>
+                </li>
+              {%- endif -%}
+              {%- if settings.social_vimeo_link != blank -%}
+                <li class="list-social__item">
+                  <a href="{{ settings.social_vimeo_link }}" class="link list-social__link">
+                    {%- render 'icon-vimeo' -%}
+                  </a>
+                </li>
+              {%- endif -%}
+            </ul>
+          </div>
+        {% endif %}
+      </div>
+      <div class="footer_copyright">
+        <div class="copyright_section">
+          <small class="copyright__content">&copy; {{ 'now' | date: '%Y' }}, {{ shop.name | link_to: routes.root_url -}}
+          </small>
+          <small class="copyright__content">{{ powered_by_link }}</small>
+          {%- if section.settings.show_policy -%}
+            <ul class="footer_policies list-unstyled">
+              {%- for policy in shop.policies -%}
+                {%- if policy != blank -%}
+                  <li>
+                    <small class="copyright__content footer_content">
+                      <a href="{{ policy.url }}">{{ policy.title }}</a>
+                    </small>
+                  </li>
+                {%- endif -%}
+              {%- endfor -%}
+            </ul>
+          {%- endif -%}
+        </div>
+      </div>
+    </section>
+  </div>
+</footer>
+
+<script>
+      let FooterDropdown = document.querySelectorAll(".footer-main-links");
+      FooterDropdown.forEach(FooterDropdown => {
+        FooterDropdown.addEventListener("click", event => {
+            event.currentTarget;
+            const active = document.querySelector(".footer-main-links.active");
+            if (active && active !== FooterDropdown) {
+                active.classList.toggle("active");
+            }
+            FooterDropdown.classList.toggle("active");
+            FooterDropdown.nextElementSibling;
+    });
+  });
+</script>
+
+{% schema %}
+  {
+    "name": "Custom Footer",
+    "settings": [
+      {
+        "type": "color_scheme",
+        "id": "color_scheme",
+        "label": "Color Scheme",
+        "default": "scheme-1"
+      },
+      {
+        "type": "range",
+        "id": "padding_top",
+        "min": 0,
+        "max": 100,
+        "step": 4,
+        "unit": "px",
+        "label": "Padding Top",
+        "default": 36
+      },
+      {
+        "type": "range",
+        "id": "padding_bottom",
+        "min": 0,
+        "max": 100,
+        "step": 4,
+        "unit": "px",
+        "label": "Padding Bottom",
+        "default": 36
+      },
+      {
+        "type": "image_picker",
+        "id": "footer-logo",
+        "label": "Footer Logo"
+      },
+      {
+        "type": "richtext",
+        "id": "content",
+        "label": "Content"
+      },
+      {
+        "type": "checkbox",
+        "id": "country",
+        "label": "Country Label"
+      }, {
+        "type": "checkbox",
+        "id": "language",
+        "label": "laungage Label"
+      }, {
+        "type": "text",
+        "id": "footer-title",
+        "label": "Footer Title",
+        "default": "title"
+      }, {
+        "type": "text",
+        "id": "footer-content",
+        "label": "Footer Subscribe",
+        "default": "content"
+      }, {
+        "type": "checkbox",
+        "id": "payment_enable",
+        "default": true,
+        "label": "Payment Unable"
+      }, {
+        "type": "checkbox",
+        "id": "show_policy",
+        "default": false,
+        "label": "Show Policy"
+      }, {
+        "type": "checkbox",
+        "id": "social_media_footer",
+        "label": "Social Media Enable"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "footer",
+        "name": "Footer Link",
+        "limit": 5,
+        "settings": [
+          {
+            "type": "link_list",
+            "id": "footer-link",
+            "label": "Footer Menu",
+            "default": "footer"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "Custom Footer",
+        "blocks": [
+          {
+            "type": "footer"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}
+

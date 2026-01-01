@@ -1,0 +1,244 @@
+{% style %}
+  .main_richtext_section {
+    {% if section.settings.bg_image != blank %}
+      background-image: url({{ section.settings.bg_image | img_url: "master" }});
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: {% if section.settings.bg_attachment == "fixed" %} fixed {% endif %}{% if section.settings.bg_attachment == "scroll" %} scroll {% endif %};
+      background-size: cover;
+    {% else %}
+      background-color: rgb(var(--color-background));
+    {% endif %}
+    width: 100%;
+    position: relative;
+    display: block;
+  }
+
+  .main_richtext_section {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media (max-width: 767px) {
+    .main_richtext_section {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+
+  .rich_text_inner {
+    text-align: {{ section.settings.text_alignment }};
+    display: block;
+    width: 100%;
+    position: relative;
+    z-index: 1;
+  }
+
+  .richtext_title {
+    font-size: 35px;
+    margin-bottom: 20px;
+    display: inline-block;
+    color: rgb(var(--color-foreground));
+  }
+
+  .rich_text_inner p {
+    color: rgb(var(--color-foreground));
+  }
+
+  .btn_inner_content {
+    margin-top: 20px;
+  }
+
+  .btn_inner_title {
+    background-color: rgb(var(--color-button-background));
+    color: rgb(var(--color-button-text));
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 4px;
+    display: inline-block;
+  }
+{% endstyle %}
+
+<div class="main_richtext_section color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding">
+  <section class="main-content">
+    <div class="rich_text_inner">
+      {% for block in section.blocks %}
+        {% case block.type %}
+          {% when 'title' %}
+            <h1 class="richtext_title">
+              {% if block.settings.title != blank %}
+                {{ block.settings.title }}
+              {% endif %}
+            </h1>
+          {% when 'description' %}
+            <p class="richtext_content">
+              {% if block.settings.content != blank %}
+                {{ block.settings.content }}
+              {% endif %}
+            </p>
+          {% when 'button' %}
+            {% if block.settings.btn_txt != blank %}
+              <button class="btn_inner_content">
+                <a class="btn_inner_title" href="{{ block.settings.btn_url }}">
+                  {{ block.settings.btn_txt }}
+                </a>
+              </button>
+            {% endif %}
+        {% endcase %}
+      {% endfor %}
+    </div>
+  </section>
+  <div class="image_overlay" style="background-color: {{ section.settings.img_gradient_color }}; opacity: {{ section.settings.image_gradient_darkness }}%"></div>
+</div>
+
+{% schema %}
+{
+  "name": "Richtext Section",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color Scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 36
+    },
+    {
+      "type": "image_picker",
+      "id": "bg_image",
+      "label": "Background Image"
+    },
+    {
+      "type": "color",
+      "id": "img_gradient_color",
+      "label": "Image Gradient Color",
+      "default": "rgb(0, 0, 0)"
+    },
+    {
+      "type": "range",
+      "id": "image_gradient_darkness",
+      "min": 0,
+      "max": 100,
+      "step": 10,
+      "unit": "%",
+      "label": "Image Gradient Darkness",
+      "default": 20
+    },
+    {
+      "type": "select",
+      "id": "bg_attachment",
+      "label": "Background Attachment",
+      "options": [
+        {
+          "label": "Fixed",
+          "value": "fixed"
+        },
+        {
+          "label": "Scroll",
+          "value": "scroll"
+        }
+      ],
+      "default": "scroll"
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Text Alignment",
+      "default": "center",
+      "options": [
+        {
+          "label": "Left",
+          "value": "left"
+        },
+        {
+          "label": "Center",
+          "value": "center"
+        },
+        {
+          "label": "Right",
+          "value": "right"
+        }
+      ]
+    }
+  ],
+  "blocks": [
+    {
+      "type": "title",
+      "name": "Title",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Main Title",
+          "default": "Main Heading"
+        }
+      ]
+    },
+    {
+      "type": "description",
+      "name": "Description",
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "content",
+          "label": "Description",
+          "default": "<p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Aperiam blanditiis eos vel cumque! Cum consequatur accusamus harum delectus cupiditate? Aspernatur nobis obcaecati ipsum commodi delectus, eaque harum recusandae maiores distinctio!</p>"
+        }
+      ]
+    },
+    {
+      "type": "button",
+      "name": "Button",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "url",
+          "id": "btn_url",
+          "label": "Button URL"
+        },
+        {
+          "type": "text",
+          "id": "btn_txt",
+          "label": "Button Text",
+          "default": "Click Here"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Richtext Section",
+      "blocks": [
+        {
+          "type": "title"
+        },
+        {
+          "type": "description"
+        },
+        {
+          "type": "button"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

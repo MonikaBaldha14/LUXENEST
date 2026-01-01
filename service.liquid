@@ -1,0 +1,647 @@
+<link
+  rel="stylesheet"
+  type="text/css"
+  href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css" />
+<link
+  rel="stylesheet"
+  type="text/css"
+  href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css" />
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+
+
+{% style %}
+  .slick-prev,
+  .slick-next {
+    z-index: 2;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    padding: 0;
+    border-radius: 50%;
+    border: none;
+    background-color: rgba(var(--color-background));
+    font-size: 0;
+    height: 35px;
+    width: 35px;
+    line-height: 35px;
+    cursor: pointer;
+    visibility: visible;
+  }
+
+  .slick-prev {
+    left: 10px;
+  }
+
+  .slick-next {
+    right: 10px;
+  }
+
+  .slick-prev:before,
+  .slick-next:before {
+    color: #000;
+    line-height: 35px;
+  }
+
+  .slick-prev:before {
+    content: "\f104"; /* FA icon for left arrow */
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    font-size: 17px;
+  }
+
+  .slick-next:before {
+  content: "\f105"; /* Font Awesome icon for right arrow */
+  font-family: "Font Awesome 6 Free";
+  font-weight: 900;
+  font-size: 17px;
+}
+
+
+  .main_service_section.section-{{ section.id }} {
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+  }
+
+  .service_inner_item {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .service_image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    flex-grow: 1;
+  }
+
+  .service_title h2 {
+    font-weight: 600;
+    color: rgb(var(--color-foreground));
+    text-transform: uppercase;
+    margin: 0 0 8px;
+  }
+
+  .content p {
+    font-size: 13px;
+    color: rgb(var(--color-foreground));
+    line-height: 1.5;
+    margin: 0;
+  }
+
+
+  .service_text {
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    border-radius: 0px;
+    /* align-items: center; */
+    justify-content: center;
+    padding: 0 15px;
+  }
+
+  {% for block in section.blocks %}
+    .service_text.content-{{ block.id }} {
+      padding-top: {{ block.settings.padding-top }}px;
+      padding-bottom: {{ block.settings.padding-bottom }}px;
+      background-color: {{ block.settings.bg_color }};
+    }
+
+{% for block in section.blocks %}
+  {% if block.type == 'text' %}
+    .service_title.text_block-{{ block.id }} h2 {
+      color: {{ block.settings.text_color }};
+      font-size: {{ block.settings.title_font_size }}px;
+    }
+
+    .content.text_block-{{ block.id }} p {
+      font-size: {{ block.settings.content_font_size }}px;
+      color: {{ block.settings.text_color }};
+    }
+
+    .service_button.text_block-{{ block.id }} a {
+      color: {{ block.settings.text_color }};
+      font-size: {{ block.settings.button_font_size }}px;
+    }
+
+  {% endif %}
+{% endfor %}
+
+
+    .service_button {
+      margin-top: 15px;
+    }
+
+    .service_button a {
+      position: relative;
+      display: block;
+      width: 100%;
+      transition: all 0.5s ease-in-out;
+    }
+   
+    .service_button:hover a {
+      opacity: 0.8;
+    }
+  
+    .service_button svg {
+    position: absolute;
+    top: 50%;
+    width: 20px;
+    height: 20px;
+    margin-left: 8px;
+    transition: all 0.5s ease-in-out;
+    transform: translateY(-50%);
+}
+
+  .service_button:hover a svg {
+    margin-left: 15px;
+  }
+    
+  .text-left {
+  text-align: left;
+}
+.text-center {
+  text-align: center;
+}
+.text-right {
+  text-align: right;
+}
+
+.heading-left {
+  align-items: start;
+}
+.heading-center {
+  align-items: center;
+}
+.heading-right {
+  align-items: end;
+}
+
+
+
+    @media (max-width: 551px) {
+      .service_image_inner.image-{{ block.id }} {
+        height: 100%;
+      }
+    }
+  {% endfor %}
+
+
+  .service_image_inner {
+    position: relative;
+    padding-top: 6%;
+    width: 100%;
+    height: 100%;
+  }
+  
+  .service_image_inner img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    object-fit: cover;
+    height: 100%;
+  }
+
+
+  .service_block.service-{{ section.id }}.full-width .service_image.service_main_slider {
+    width: 100%;
+    height: calc(100vh - 130px);
+  }
+
+  .service_block.service-{{ section.id }}.full-width .service_image.service_main_slider .service_image_inner {
+    padding: unset;
+  }
+
+  .main_service_section.section-{{ section.id }} {
+    width: 100%;
+    height: 100%; 
+  }
+
+  @media (max-width: 768px) {
+    .service_image_inner {
+      position: relative !important;
+      padding-top: 0;
+    }
+    .service_image_inner img {
+      position: relative !important;
+    }
+  }
+
+  @media (max-width: 551px) {
+
+    .service_block.service-{{ section.id }} {
+      flex-direction: column;
+    }
+
+    .service_inner_item {
+      width: 100%;
+    }
+
+    /* .service_title h2 {
+      font-size: 14px;
+    } */
+
+    .content p {
+      font-size: 12px;
+    }
+
+
+  }
+
+  .service_block.service-{{ section.id }} {
+    display: grid;
+    grid-template-columns: 49% 49%;
+    align-items: stretch;
+    gap: 20px;
+  }
+
+  .service_block.service-{{ section.id }}.full-width {
+    grid-template-columns: 100%;
+}
+
+  .service_block.service-{{ section.id }}
+  .service_inner_item {
+    width: 100% !important;
+    padding: 0 10px;
+  }
+
+  @media (max-width: 768px) {
+    .service_block.service-{{ section.id }} {
+      grid-template-columns: 100%;
+    }
+  }
+
+  .service_block.service-{{ section.id }}
+  .slick-list.draggable
+  , .service_block.service-{{ section.id }}
+  .slick-track {
+    height: 100%;
+  }
+
+
+  .custom-liquid-block {
+      width: 100%;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+{% endstyle %}
+
+
+<div class="main_service_section section-{{ section.id }}">
+  <section class="main-content">
+    <div class="service_block service-{{ section.id }} {% if section.blocks.size == 1 %}full-width{% else %}half-width{% endif %}">
+      {% for block in section.blocks %}
+        {% case block.type %}
+          {% when 'image' %}
+            <div class="service_image {% if block.settings.enable_slider %}service_main_slider{% endif %} image-{{ block.id }}">
+              {% if block.settings.enable_slider %}
+                {% if block.settings.image_one != blank %}
+                  <div class="service_image_inner image-{{ block.id }} service_image_one">
+                    <img src="{{ block.settings.image_one | img_url: 'master' }}" alt="Image One">
+                  </div>
+                {% endif %}
+                {% if block.settings.image_two != blank %}
+                  <div class="service_image_inner image-{{ block.id }} service_image_two">
+                    <img src="{{ block.settings.image_two | img_url: 'master' }}" alt="Image Two">
+                  </div>
+                {% endif %}
+                {% if block.settings.image_three != blank %}
+                  <div class="service_image_inner image-{{ block.id }} service_image_three">
+                    <img src="{{ block.settings.image_three | img_url: 'master' }}" alt="Image Three">
+                  </div>
+                {% endif %}
+                {% if block.settings.image_four != blank %}
+                  <div class="service_image_inner image-{{ block.id }} service_image_four">
+                    <img src="{{ block.settings.image_four | img_url: 'master' }}" alt="Image Four">
+                  </div>
+                {% endif %}
+                {% if block.settings.image_five != blank %}
+                  <div class="service_image_inner image-{{ block.id }} service_image_five">
+                    <img src="{{ block.settings.image_five | img_url: 'master' }}" alt="Image Five">
+                  </div>
+                {% endif %}
+                {% if block.settings.image_six != blank %}
+                  <div class="service_image_inner image-{{ block.id }} service_image_six">
+                    <img src="{{ block.settings.image_six | img_url: 'master' }}" alt="Image Six">
+                  </div>
+                {% endif %}
+              {% else %}
+                {% if block.settings.image_one != blank %}
+                  <div class="service_image_inner image-{{ block.id }} service_image_one">
+                    <img src="{{ block.settings.image_one | img_url: 'master' }}" alt="Image One">
+                  </div>
+                {% else %}
+                  {{ 'product-1' | placeholder_svg_tag: 'my-custom-class' }}
+                {% endif %}
+              {% endif %}
+            </div>
+
+          {% when 'text' %}
+            <div class="service_text content-{{ block.id }} text-{{ block.settings.text_alignment }}">
+              {% if block.settings.title != blank %}
+                <div class="service_title text_block-{{ block.id }} heading-{{ block.settings.heading_alignment }}">
+                  <h2>{{ block.settings.title }}</h2>
+                </div>
+              {% endif %}
+              {% if block.settings.content != blank %}
+                <div class="content text_block-{{ block.id }}">
+                  {{ block.settings.content }}
+                </div>
+              {% endif %}
+              {% if block.settings.button_url != blank %}
+                <div class="service_button text_block-{{ block.id }}">
+                  <a href="{{ block.settings.button_url }}">
+                    {{ block.settings.button_text }}
+                    <svg width="20" height="20" class="arrow" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+                      <!-- Dashed Line -->
+                      <line x1="5" y1="30" x2="45" y2="30" stroke="black" stroke-width="5" stroke-dasharray="8,5"></line>
+                      <!-- Arrowhead -->
+                      <polygon points="45,20 60,30 45,40" fill="black"></polygon>
+                    </svg>
+                  </a>
+                </div>
+              {% endif %}
+              {% if block.settings.custom_liquid_code != blank %}
+                <div class="custom-liquid-block">
+                  {{ block.settings.custom_liquid_code }}
+                </div>
+              {% endif %}
+            </div>
+        {% endcase %}
+      {% endfor %}
+    </div>
+  </section>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    {% for block in section.blocks %}
+    var slider = $('.service_main_slider.image-{{ block.id }}');
+    if (slider.length) {
+      slider.slick({
+        centerMode: true,
+        centerPadding: '0px',
+        slidesToShow: 1,
+        infinite: true,
+        arrows: {{ block.settings.enable_arrows | default: true | json }},
+        dots: false,
+        autoplay: {{ block.settings.autoplay | default: false }},
+        autoplaySpeed: {{ block.settings.autoplay_speed | default: 3000 }},
+        pauseOnHover: false,
+        {% if block.settings.fade %}
+          fade: true,
+          cssEase: 'linear'
+        {% endif %}
+      });
+    }
+    {% endfor %}
+  });
+</script>
+
+
+{% schema %}
+  {
+    "name": "Custom Image With text",
+    "settings": [
+      {
+        "type": "range",
+        "id": "padding_top",
+        "label": "Padding Top",
+        "min": 0,
+        "max": 100,
+        "step": 4,
+        "default": 20,
+        "unit": "px"
+      }, {
+        "type": "range",
+        "id": "padding_bottom",
+        "label": "Padding Bottom",
+        "min": 0,
+        "max": 100,
+        "step": 4,
+        "default": 20,
+        "unit": "px"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "image",
+        "name": "Image",
+        "limit": 1,
+        "settings": [
+          {
+            "type": "checkbox",
+            "id": "enable_slider",
+            "label": "Enable Slider"
+          },
+          {
+            "type": "image_picker",
+            "id": "image_one",
+            "label": "Image One"
+          },
+          {
+            "type": "image_picker",
+            "id": "image_two",
+            "label": "Image Two"
+          },
+          {
+            "type": "image_picker",
+            "id": "image_three",
+            "label": "Image Three"
+          }, {
+            "type": "image_picker",
+            "id": "image_four",
+            "label": "Image Four"
+          }, {
+            "type": "image_picker",
+            "id": "image_five",
+            "label": "Image Five"
+          }, {
+            "type": "image_picker",
+            "id": "image_six",
+            "label": "Image Six"
+          }, {
+            "type": "header",
+            "content": "Diaploama Settings"
+          }, {
+            "type": "checkbox",
+            "id": "autoplay",
+            "label": "Enable Autoplay",
+            "default": true
+          }, {
+            "type": "range",
+            "id": "autoplay_speed",
+            "label": "Autoplay Speed (ms)",
+            "min": 1000,
+            "max": 9000,
+            "step": 500,
+            "default": 3000,
+            "info": "Set how long each image stays before changing. 2000ms = faster, 9000ms = slower."
+          }, {
+            "type": "checkbox",
+            "id": "fade",
+            "label": "Enable Fade Transition",
+            "default": false
+          }, {
+            "type": "checkbox",
+            "id": "enable_arrows",
+            "label": "Enable Arrows",
+            "default": true
+          }
+
+        ]
+      }, {
+        "type": "text",
+        "name": "Text",
+        "limit": 1,
+        "settings": [
+          {
+            "type": "text",
+            "id": "title",
+            "label": "Title",
+            "default": "Main Heading"
+          },
+          {
+            "type": "richtext",
+            "id": "content",
+            "label": "Content"
+          },
+          {
+            "type": "url",
+            "id": "button_url",
+            "label": "Button URL"
+          },
+          {
+            "type": "text",
+            "id": "button_text",
+            "label": "Button Text",
+            "default": "Click here"
+          },
+          {
+            "type": "range",
+            "id": "title_font_size",
+            "label": "Title Font Size",
+            "min": 10,
+            "max": 50,
+            "step": 1,
+            "default": 16,
+            "unit": "px"
+          },
+          {
+            "type": "range",
+            "id": "content_font_size",
+            "label": "Content Font Size",
+            "min": 10,
+            "max": 30,
+            "step": 1,
+            "default": 13,
+            "unit": "px"
+          },
+          {
+            "type": "range",
+            "id": "button_font_size",
+            "label": "Button Font Size",
+            "min": 10,
+            "max": 30,
+            "step": 1,
+            "default": 14,
+            "unit": "px"
+          }, {
+            "type": "range",
+            "id": "padding-top",
+            "label": "Content Padding Top",
+            "min": 20,
+            "max": 250,
+            "step": 5,
+            "unit": "px",
+            "default": 30
+          }, {
+            "type": "range",
+            "id": "padding-bottom",
+            "label": "Content Padding Bottom",
+            "min": 20,
+            "max": 250,
+            "step": 5,
+            "unit": "px",
+            "default": 30
+          }, {
+            "type": "color",
+            "id": "bg_color",
+            "label": "Background Color",
+            "default": "#f9f4ee"
+          },
+           {
+      "type": "select",
+      "id": "heading_alignment",
+      "label": "Heading alignment",
+      "default": "left",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ]
+    },
+          {
+  "type": "select",
+  "id": "text_alignment",
+  "label": "Text alignment",
+  "default": "left",
+  "options": [
+    {
+      "value": "left",
+      "label": "Left"
+    },
+    {
+      "value": "center",
+      "label": "Center"
+    },
+    {
+      "value": "right",
+      "label": "Right"
+    }
+  ]
+    }
+    ,
+          {
+            "type": "color",
+            "id": "text_color",
+            "label": "Text Color",
+            "default": "#333333"
+          }, {
+            "type": "liquid",
+            "id": "custom_liquid_code",
+            "label": "Custom Liquid Code"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "Custom Image With text",
+        "blocks": [
+          {
+            "type": "image"
+          }, {
+            "type": "text"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

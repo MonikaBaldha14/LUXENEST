@@ -1,0 +1,225 @@
+<style>
+  .image_hotspot_main_section {
+    padding-top: {
+        {
+        section.settings.padding_top | times: 0.75 | round: 0
+      }
+    }
+
+    px;
+
+    padding-bottom: {
+        {
+        section.settings.padding_bottom | times: 0.75 | round: 0
+      }
+    }
+
+    px;
+  }
+
+  @media (max-width: 767px) {
+    .image_hotspot_main_section {
+      padding-top: {
+          {
+          section.settings.padding_top
+        }
+      }
+
+      px;
+
+      padding-bottom: {
+          {
+          section.settings.padding_bottom
+        }
+      }
+
+      px;
+    }
+  }
+</style>
+
+<div
+  class="image_hotspot_main_section color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding">
+  <section class="main-content">
+    <div class="img_hotspot_main_block" id="product_hotspot">
+      {% if section.settings.heading != blank or section.settings.content-inner != blank %}
+      <div class="main_section_head">
+        {% if section.settings.heading != blank %}
+        <h2 class="heading">{{ section.settings.heading }}</h2>
+        {% endif %}
+        {% if section.settings.content-inner != blank %}
+        {{ section.settings.content-inner }}
+        {% endif %}
+      </div>
+      {% endif %}
+      <div class="product_img_hotspot">
+        {% if section.settings.hotspot_img == blank %}
+        <div class="img_section">
+          {{ 'collection-1' | placeholder_svg_tag }}
+        </div>
+        {% for block in section.blocks %}
+        <div class="svg_section">
+          <svg class="hotspot_icon hotspot_icon{{forloop.index}}" data-index="{{forloop.index}}" width="30px"
+            height="30px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+            style="top: {{ block.settings.top_position }}%;
+                                          left: {{ block.settings.left_position }}%;    
+                                          transform: translate(-{{ block.settings.top_position }}%, -{{ block.settings.left_position }}%);">
+            <path d="M4 12H20M12 4V20" stroke="#000000" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round" />
+          </svg>
+        </div>
+        {% endfor %}
+        {% else %}
+        <div class="img_section">
+          <img class="img_hotspot" src="{{ section.settings.hotspot_img |  img_url: 'master' }}" alt="Hotspot Image">
+          {% for block in section.blocks %}
+          <div class="svg_section">
+            <svg class="hotspot_icon hotspot_icon{{forloop.index}}" data-index="{{forloop.index}}" width="30px"
+              height="30px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+              style="top: {{ block.settings.top_position }}%;
+                                            left: {{ block.settings.left_position }}%;    
+                                            transform: translate(-{{ block.settings.top_position }}%, -{{ block.settings.left_position }}%);">
+              <path d="M4 12H20M12 4V20" stroke="#000000" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round" />
+            </svg>
+          </div>
+          {% endfor %}
+        </div>
+        {% endif %}
+
+        <div class="hotspot_product_section">
+          <ul class="product_slider_section" role="list" aria-label="{{ 'general.slider.name' | t }}">
+            {%- for block in section.blocks -%}
+            {% if block.type == 'product' %}
+            {% if block.settings.hotspot_product != blank %}
+            {% assign product = all_products[block.settings.hotspot_product] %}
+            <li class="featured_product product_hotspot_section product_hotspot_section{{forloop.index}}"
+              data-index="{{forloop.index}}">
+              {% render 'card-product'
+              , product: product
+              , collection: collection
+              , second_image: section.settings.second_img %}
+            </li>
+            {% else %}
+            <li class="featured_product product_hotspot_section product_hotspot_section{{forloop.index}}"
+              data-index="{{forloop.index}}">
+              <div class="featured-product-img">
+                {{ 'product-1' | placeholder_svg_tag }}
+              </div>
+              <div class="main-product-content">
+                <div class="featured-product-title">
+                  <h3 class="title">Example of Product</h3>
+                </div>
+              </div>
+            </li>
+            {% endif %}
+            {% endif %}
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+{% schema %}
+{
+"name": "Image Hotspot",
+"settings": [
+{
+"type": "color_scheme",
+"id": "color_scheme",
+"label": "Color Scheme",
+"default": "scheme-1"
+},
+{
+"type": "range",
+"id": "padding_top",
+"min": 0,
+"max": 100,
+"step": 4,
+"unit": "px",
+"label": "Padding Top",
+"default": 36
+},
+{
+"type": "range",
+"id": "padding_bottom",
+"min": 0,
+"max": 100,
+"step": 4,
+"unit": "px",
+"label": "Padding Bottom",
+"default": 36
+},
+{
+"type": "text",
+"id": "heading",
+"label": "HotsPot Heading",
+"default": "Heading"
+}, {
+"type": "richtext",
+"id": "content-inner",
+"label": "Description"
+}, {
+"type": "image_picker",
+"id": "hotspot_img",
+"label": "HotsPot Image"
+}, {
+"type": "checkbox",
+"id": "second_img",
+"label": "Enable to on hover Second Image"
+},
+{
+"type": "checkbox",
+"id": "compare_product",
+"label": "Compare Prouct"
+}
+],
+"blocks": [
+{
+"type": "product",
+"name": "Add Product",
+"settings": [
+{
+"type": "product",
+"id": "hotspot_product",
+"label": "Hotspot Product"
+}, {
+"type": "range",
+"id": "top_position",
+"label": "Hotspot Top Position",
+"min": 0,
+"max": 100,
+"default": 50,
+"step": 1,
+"unit": "%"
+}, {
+"type": "range",
+"id": "left_position",
+"label": "Hotspot Left Position",
+"min": 0,
+"max": 100,
+"default": 50,
+"step": 1,
+"unit": "%"
+}
+]
+}
+],
+"presets": [
+{
+"name": "Image Hotspot",
+"blocks": [
+{
+"type": "product"
+}, {
+"type": "product"
+}, {
+"type": "product"
+}
+]
+}
+]
+}
+{% endschema %}

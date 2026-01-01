@@ -1,0 +1,66 @@
+<script src="{{ 'recently-product.js' | asset_url }}" defer="defer"></script>
+
+<div class="main_recently_section">
+  <section class="main-content">
+    {% if section.settings.heading != blank or section.settings.content-inner != blank %}
+    <div class="main_section_head">
+      {% if section.settings.heading != blank %}
+      <h2 class="heading">{{ section.settings.heading }}</h2>
+      {% endif %}
+      {% if section.settings.content-inner != blank %}
+      {{ section.settings.content-inner }}
+      {% endif %}
+    </div>
+    {% endif %}
+    {% render 'recently-viewed' %}
+  </section>
+</div>
+{% schema %}
+{
+"name": "Recently View",
+"settings": [
+{
+"type": "color_scheme",
+"id": "color_scheme",
+"label": "Color Scheme",
+"default": "scheme-1"
+},
+{
+"type": "range",
+"id": "padding_top",
+"min": 0,
+"max": 100,
+"step": 4,
+"unit": "px",
+"label": "Padding Top",
+"default": 36
+},
+{
+"type": "range",
+"id": "padding_bottom",
+"min": 0,
+"max": 100,
+"step": 4,
+"unit": "px",
+"label": "Padding Bottom",
+"default": 36
+},
+{
+"type": "text",
+"id": "title",
+"label": "Title",
+"default": "Main Title"
+}, {
+"type": "text",
+"id": "content",
+"label": "discription",
+"default": "Sub Heading"
+}
+],
+"presets": [
+{
+"name": "Recently View"
+}
+]
+}
+{% endschema %}

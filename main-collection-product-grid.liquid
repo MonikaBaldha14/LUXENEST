@@ -1,0 +1,213 @@
+<style>
+  .product_filter_main_section {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media (max-width: 767px) {
+    .product_filter_main_section {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+</style>
+
+<div class="product_filter_main_section color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding">
+  <section class="all_main_filter_section main-content">
+    <div class="layout-block"></div>
+    <div class="loader_filter"></div>
+    <div class="layout_block_filter"></div>
+    {% paginate collection.products %}
+      <div class="btn_filter">
+        <button class="filter_sort_btn">
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            focusable="false"
+            class="icon icon-filter"
+            aria-hidden="true">
+            <path
+              d="M16 6L21 6M3 6L12 6M3 18L12 18M3 12H8M12 12H21M16 18H21M16 4V8M8 10V14M16 16V20"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"></path>
+          </svg>
+          <span>Filter And Sort</span>
+        </button>
+      </div>
+
+      <div class="flex_section_filters">
+        <div class="button_section">
+          <button class="hide_filters">
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              focusable="false"
+              class="icon icon-filter"
+              aria-hidden="true">
+              <path
+                d="M16 6L21 6M3 6L12 6M3 18L12 18M3 12H8M12 12H21M16 18H21M16 4V8M8 10V14M16 16V20"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"></path>
+            </svg>
+            <span class="hide_filter_txt">Hide Filters</span>
+            <span class="show_filter_txt hidden">Filters</span>
+          </button>
+        </div>
+
+        <div class="product_count_block">
+          <div class="product_count_text">
+            <span>{{ collection.all_products_count }} Products</span>
+          </div>
+        </div>
+
+        <div class="sortby_block">
+          <div class="collection-filter-inner">
+            <span class="sort_by_title">Sort By:</span>
+            <form class="sortby_form">
+              {%- assign sort_by = collection.sort_by | default: collection.default_sort_by -%}
+              <select name="sort_by" class="collection-filter-sortby">
+                {% for option in collection.sort_options %}
+                  <option
+                    value="{{ option.value }}"
+                    {% if option.value == sort_by %}
+                    selected="selected"
+                    {% endif %}>
+                    {{ option.name }}
+                  </option>
+                {% endfor %}
+              </select>
+            </form>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="product_filter_section">
+        {{ 'facets.css' | asset_url | stylesheet_tag }}
+        <script src="{{ 'facets.js' | asset_url }}" defer="defer"></script>
+        <aside
+          aria-labelledby="verticalTitle"
+          class="filter_main_section active facets-wrapper{% unless section.settings.enable_filtering %} facets-wrapper--no-filters{% endunless %}{% if section.settings.filter_type != 'vertical' %} page-width{% endif %}"
+          id="main-collection-filters"
+          data-id="{{ section.id }}">
+          <div class="filter_responsive_content">
+            <h2>Filter And Sort</h2>
+            <div class="product_count_text_responsive">
+              <span>{{ collection.all_products_count }} Products</span>
+            </div>
+            <svg
+              class="close_filter"
+              viewBox="0 0 48 48"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg">
+              <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+              <g
+                id="SVGRepo_tracerCarrier"
+                stroke-linecap="round"
+                stroke-linejoin="round"></g>
+              <g id="SVGRepo_iconCarrier">
+                <rect
+                  width="48"
+                  height="48"
+                  fill="white"
+                  fill-opacity="0.01"></rect>
+                <path
+                  d="M8 8L40 40"
+                  stroke="rgb(var(--color-foreground))"
+                  stroke-width="4"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"></path>
+                <path
+                  d="M8 40L40 8"
+                  stroke="rgb(var(--color-foreground))"
+                  stroke-width="4"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"></path>
+              </g>
+            </svg>
+          </div>
+          {% render 'facets' %}
+        </aside>
+        <div class="product-grid-container">
+          {%- if collection.products.size == 0 -%}
+            <div
+              class="collection collection--empty page-width"
+              id="product-grid"
+              data-id="{{ section.id }}">
+              <div class="product_count">
+                <p>No added Products</p>
+              </div>
+            </div>
+          {%- else -%}
+            <div class="filter_collection collection">
+              <ul data-id="{{ section.id }}" class="collection_product featured-product-row">
+                {%- for product in collection.products -%}
+                  <li class="featured_product featured_product_list grid__item">
+                    {% render 'card-product'
+                      , product: product %}
+                  </li>
+                {%- endfor -%}
+              </ul>
+
+              {%- if paginate.pages > 1 -%}
+                {% render 'pagination'
+                  , paginate: paginate
+                  , anchor: '' %} 
+              {%- endif -%}
+            </div>
+          {%- endif -%}
+        </div>
+      </div>
+    {%- endpaginate -%}
+  </section>
+</div>
+
+{% schema %}
+  {
+    "name": "Product Grid",
+    "class": "section",
+    "settings": [
+      {
+        "type": "color_scheme",
+        "id": "color_scheme",
+        "label": "Color Scheme",
+        "default": "scheme-1"
+      }, {
+        "type": "range",
+        "id": "padding_top",
+        "min": 0,
+        "max": 100,
+        "step": 4,
+        "unit": "px",
+        "label": "Padding Top",
+        "default": 36
+      }, {
+        "type": "range",
+        "id": "padding_bottom",
+        "min": 0,
+        "max": 100,
+        "step": 4,
+        "unit": "px",
+        "label": "Padding Bottom",
+        "default": 36
+      }, {
+        "type": "checkbox",
+        "id": "second_img",
+        "label": "Enable to on hover Second Image"
+      },
+      {
+        "type": "checkbox",
+        "id": "compare_product",
+        "label": "Compare Prouct"
+      }
+    ]
+  }
+{% endschema %}

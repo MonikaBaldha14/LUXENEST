@@ -1,0 +1,331 @@
+{% style %}
+.main_collection_section {
+padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+background-color: rgb(var(--color-background));
+}
+
+@media (max-width: 767px) {
+.main_collection_section {
+padding-top: {{ section.settings.padding_top }}px;
+padding-bottom: {{ section.settings.padding_bottom }}px;
+}
+
+.main_collection_inner{
+padding-top: {{ section.settings.inner_padding_top }}px;
+padding-bottom: {{ section.settings.inner_padding_bottom }}px;
+}
+}
+
+.main_collection_inner {
+border-top: 1px solid rgb(var(--color-foreground), 0.20);
+border-bottom: 1px solid rgb(var(--color-foreground), 0.20);
+padding-top: {{ section.settings.inner_padding_top | times: 0.75 | round: 0 }}px;
+padding-bottom: {{ section.settings.inner_padding_bottom | times: 0.75 | round: 0 }}px;
+}
+
+.collection_inner_main.collection-{{ section.id }} {
+display: flex;
+width: 100%;
+flex-direction: row;
+justify-content: flex-start;
+align-items: stretch;
+}
+
+.collection_hover_main_title {
+width: 50%;
+padding: 0 15px;
+position: sticky;
+height: 100%;
+top: 0;
+}
+
+.collection_hover_main_img {
+position: relative;
+width: 50%;
+height: auto;
+}
+
+.collection_title_image.collection-{{ section.id }} {
+opacity: 0;
+visibility: hidden;
+transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
+position: absolute;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+}
+
+.collection_title_image.collection-{{ section.id }}.active {
+opacity: 1;
+visibility: visible;
+position: relative;
+}
+
+.collection_hover_title.collection-{{ section.id }} {
+cursor: pointer;
+padding: 10px;
+margin-bottom: 5px;
+width: max-content;
+}
+
+.collection_hover_title.collection-{{ section.id }} h2 {
+font-size: 40px;
+transition: all 0.5s ease-in-out;
+opacity:0.5;
+transform: scale(1);
+}
+
+.collection_hover_title.collection-{{ section.id }}.active h2 {
+opacity: 1;
+transform: scale(1.1);
+
+}
+
+.collection_inner_img {
+display: block;
+position: relative;
+width: 100%;
+height: auto;
+overflow: hidden;
+}
+
+.collection_inner_img img {
+display: block;
+width: 100%;
+height: auto;
+object-fit: contain;
+transform: scale(1);
+transition: all 0.5s ease-in-out;
+}
+
+.collection_title_image.collection-{{ section.id }}.active:hover .collection_inner_img img {
+transform: scale(1.05);
+}
+
+.collection_btn_link {
+position: absolute;
+top: 50%;
+left: 50%;
+transform: translate(-50%, -50%);
+background-color: rgb(var(--color-button));
+width: max-content;
+opacity: 0;
+visibility: hidden;
+transition: all 0.5s ease-in-out;
+}
+
+.collection_btn_link a {
+color: rgb(var(--color-button-text));
+font-size: 15px;
+text-transform: uppercase;
+display: block;
+width: 100%;
+height: 100%;
+padding: 10px 15px;
+}
+
+.collection_title_image.collection-{{ section.id }}.active:hover .collection_btn_link {
+opacity: 1;
+visibility: visible;
+}
+
+
+@media (max-width: 680px){
+.collection_inner_main.collection-{{ section.id }} {
+display: block;
+}
+
+.collection_hover_main_title {
+width: 100%;
+padding: 15px 0px;
+}
+
+.collection_hover_main_img {
+width: 100%;
+}
+
+.collection_btn_link {
+opacity: 1;
+visibility: visible;
+}
+}
+
+{% endstyle %}
+
+
+<div
+    class="main_collection_section color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding">
+    <section class="main-content">
+        <div class="main_collection_inner">
+            {% if section.settings.heading != blank or section.settings.content-inner != blank %}
+            <div class="main_section_head">
+                {% if section.settings.heading != blank %}
+                <h2 class="heading">{{ section.settings.heading }}</h2>
+                {% endif %}
+                {% if section.settings.content-inner != blank %}
+                {{ section.settings.content-inner }}
+                {% endif %}
+            </div>
+            {% endif %}
+            <div class="collection_inner_main collection-{{ section.id }}">
+                <div class="collection_hover_main_title">
+                    {% for block in section.blocks %}
+                    {% assign selected_collections = block.settings.collections %}
+                    {% if block.settings.collections != blank %}
+                    <div
+                        class="collection_hover_title collection-{{ section.id }} {% if forloop.first %}active{% endif %}">
+                        <h2>{{ selected_collections.title }}</h2>
+                    </div>
+                    {% else %}
+                    <div
+                        class="collection_hover_title collection-{{ section.id }} {% if forloop.first %}active{% endif %}">
+                        <h2>Collection Title</h2>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+                <div class="collection_hover_main_img">
+                    {% for block in section.blocks %}
+                    {% assign selected_collections = block.settings.collections %}
+                    {% if block.settings.collections != blank %}
+                    <div
+                        class="collection_title_image collection-{{ section.id }} {% if forloop.first %}active{% endif %}">
+                        <div class="collection_inner_img">
+                            <img src="{{ selected_collections.image |  img_url: 'master' }}"
+                                alt="{{ selected_collections.title }}">
+                        </div>
+                        <div class="collection_btn_link">
+                            <a href="{{ selected_collections.url }}">View Collection</a>
+                        </div>
+                    </div>
+
+                    {% else %}
+                    <div
+                        class="collection_title_image collection-{{ section.id }} {% if forloop.first %}active{% endif %}">
+                        {{ 'collection-1' | placeholder_svg_tag: 'my-custom-class' }}
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const titles = document.querySelectorAll(".collection_hover_title.collection-{{ section.id }}");
+        const images = document.querySelectorAll(".collection_title_image.collection-{{ section.id }}");
+
+        titles.forEach((title, index) => {
+            title.addEventListener("mouseenter", function () {
+                titles.forEach(t => t.classList.remove("active"));
+                images.forEach(img => img.classList.remove("active"));
+
+                title.classList.add("active");
+                if (images[index]) {
+                    images[index].classList.add("active");
+                }
+            });
+        });
+    });
+</script>
+
+{% schema %}
+{
+"name": "Collection section hover",
+"settings": [
+{
+"type": "color_scheme",
+"id": "color_scheme",
+"label": "Color Scheme",
+"default": "scheme-1"
+},
+{
+"type": "range",
+"id": "padding_top",
+"min": 0,
+"max": 100,
+"step": 4,
+"unit": "px",
+"label": "Padding Top",
+"default": 36
+},
+{
+"type": "range",
+"id": "padding_bottom",
+"min": 0,
+"max": 100,
+"step": 4,
+"unit": "px",
+"label": "Padding Bottom",
+"default": 36
+},
+{
+"type": "text",
+"id": "heading",
+"label": "HotsPot Heading",
+"default": "Heading"
+}, {
+"type": "richtext",
+"id": "content-inner",
+"label": "Description"
+},
+{
+"type": "range",
+"id": "inner_padding_top",
+"min": 0,
+"max": 100,
+"step": 4,
+"unit": "px",
+"label": "Inner Section Padding Top",
+"default": 20
+},
+{
+"type": "range",
+"id": "inner_padding_bottom",
+"min": 0,
+"max": 100,
+"step": 4,
+"unit": "px",
+"label": "Inner Section Padding Bottom",
+"default": 20
+}
+],
+"blocks": [
+{
+"type": "collection",
+"name": "Collection",
+"limit": 5,
+"settings": [
+{
+"type": "collection",
+"id": "collections",
+"label": "Select Collections"
+}
+]
+}
+],
+"presets": [
+{
+"name": "Collection section hover",
+"blocks": [
+{
+"type": "collection"
+},
+{
+"type": "collection"
+},
+{
+"type": "collection"
+},
+{
+"type": "collection"
+}
+]
+}
+]
+}
+{% endschema %}

@@ -1,0 +1,151 @@
+<style>
+  .main_article_section {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media (max-width: 767px) {
+    .main_article_section {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+</style>
+
+<div class="main_article_section color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding">
+  <section class="main-content">
+    <article class="main-artical-blog">
+      {% for block in section.blocks %}
+        {% case block.type %}
+          {% when 'title' %}
+            <header class="article_main_info">
+              <div class="article_title">
+                <h2>{{ article.title }}</h2>
+              </div>
+              {% if section.settings.show_date != blank or section.settings.show_author != blank %}
+                <div class="article-author-info">
+                  {% if section.settings.show_author != blank %}
+                    <div class="author-info">
+                      <span class="author">By {{ article.author }}</span>
+                    </div>
+                  {% endif %}
+                  {% if section.settings.show_date != blank %}
+                    <div class="author-info">
+                      <span class="date">{{ article.published_at | time_tag: format: 'date' }}</span>
+                    </div>
+                  {% endif %}
+                </div>
+              {% endif %}
+            </header>
+          {% when 'featured_image' %}
+            <div class="article_blog_image">
+                <img src="{{ article.image |  img_url: 'master' }}" alt="{{ article.title }}">
+            </div>
+          {% when 'content' %}
+            <div class="article_blog_content">
+                <span>{{ article.content }}</span>
+            </div>
+        {% endcase %}
+      {% endfor %}
+
+
+      <div class="share__btns__main">
+        <div class="share__inner__btn">
+          <a class="share_btn share_fb" href="#">
+            <i class="fa fa-facebook share--fb" aria-hidden="true"></i>
+            <span>Share on Facebook</span>
+          </a>
+        </div>
+        <div class="share__inner__btn">
+          <a class="share_btn share_twitter" href="#">
+            <i class="fa fa-twitter share--twitter" aria-hidden="true"></i>
+            <span>Share on Twitter</span>
+          </a>
+        </div>
+        <div class="share__inner__btn">
+          <a class="share_btn share_printrest" href="#">
+            <i class="fa fa-pinterest-p share--printrest" aria-hidden="true"></i>
+            <span>Share on Printrest</span>
+          </a>
+        </div>
+      </div>
+    </article>
+  </section>
+</div>
+
+{% schema %}
+  {
+    "name": "Main Article",
+    "settings": [
+      {
+        "type": "color_scheme",
+        "id": "color_scheme",
+        "label": "Color Scheme",
+        "default": "scheme-1"
+      },
+      {
+        "type": "range",
+        "id": "padding_top",
+        "min": 0,
+        "max": 100,
+        "step": 4,
+        "unit": "px",
+        "label": "Padding Top",
+        "default": 36
+      },
+      {
+        "type": "range",
+        "id": "padding_bottom",
+        "min": 0,
+        "max": 100,
+        "step": 4,
+        "unit": "px",
+        "label": "Padding Bottom",
+        "default": 36
+      },
+      {
+        "type": "checkbox",
+        "id": "show_date",
+        "label": "Show Date"
+      }, {
+        "type": "checkbox",
+        "id": "show_author",
+        "label": "Show Author"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "title",
+        "name": "Title",
+        "limit": 1
+      }, {
+        "type": "featured_image",
+        "limit": 1,
+        "name": "Image",
+        "settings": [
+          {
+            "type": "select",
+            "id": "img_size",
+            "label": "Image Size",
+            "options": [
+              {
+                "value": "adapt",
+                "label": "Adapt"
+              }, {
+                "value": "square",
+                "label": "Square"
+              }, {
+                "value": "portrait",
+                "label": "Portrait"
+              }
+            ]
+          }
+        ]
+      }, {
+        "type": "content",
+        "name": "Content",
+        "limit": 1
+      }
+    ]
+  }
+{% endschema %}
